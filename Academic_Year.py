@@ -3,6 +3,7 @@ import json
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+from Class_confirmation import class_confirmation
 
 academic_year_temp = os.popen('ls ./Academic_years')
 academic_year_list = []
@@ -51,10 +52,17 @@ def Academic_year_window(root) :
                 messagebox.showwarning("WARNING", "ACADEMIC YEAR ALREADY EXISTS")
             else:
                 os.popen('mkdir ./Academic_years/'+academic_year)
+
+                with open("temp.json", 'w') as file:
+                    json_object = json.dumps({"academic_year": academic_year}, indent=4)
+                    file.write(json_object)
+                    
                 academic_year_entry.destroy()
                 confirm_button.destroy()
                 choose_button.destroy()
                 create_button.destroy()
+
+                class_confirmation(root)
 
         choose_button.grid_forget()
         create_button.grid_forget()
