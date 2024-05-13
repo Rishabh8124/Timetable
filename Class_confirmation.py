@@ -8,10 +8,47 @@ def class_confirmation(root):
 
     def confirm():
         os.popen('mkdir ./Academic_years/'+academic_year+'/Class')
+
+        final_class_list = []
+        subject_list = {
+            "subject_list": []
+        }
+        json_object = json.dumps(subject_list, indent=4)
+        
         for item in class_list:
+            final_class_list.append(item)
             for cl in item:
                 os.popen("touch ./Academic_years/"+academic_year+"/Class/"+cl+".json")
+            
+            for cl in item:
+                file = open("./Academic_years/"+academic_year+"/Class/"+cl+".json", 'w')
+                file.write(json_object)
+                file.close()
         
+        file = open("./Academic_years/"+academic_year+"/Class_list.json", 'w')
+        class_json = {
+            "class_list": final_class_list
+        }
+        json_object = json.dumps(class_json, indent=4)
+        file.write(json_object)
+        file.close()
+
+        file = open("./Academic_years/"+academic_year+"/Teacher_list.json", 'w')
+        class_json = {
+            "teacher_list": []
+        }
+        json_object = json.dumps(class_json, indent=4)
+        file.write(json_object)
+        file.close()
+
+        file = open("./Academic_years/"+academic_year+"/Lab_list.json", 'w')
+        class_json = {
+            "lab_list": []
+        }
+        json_object = json.dumps(class_json, indent=4)
+        file.write(json_object)
+        file.close()
+
         for widgets in root.winfo_children():
             widgets.destroy()
 
@@ -72,7 +109,6 @@ def class_confirmation(root):
         json_object = json.load(file)
         academic_year = json_object['academic_year']
     
-    class_numbers = list(range(1, 13))
     class_list = [[], [], []]
     frames = [None, None, None]
     scrolls = [None, None, None]
