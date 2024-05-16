@@ -132,22 +132,22 @@ def Subject_Registration(root):
     subject_registered.heading("NO OF PERIODS", text="NO OF PERIODS", anchor=CENTER)
 
     subject_name_label =  Label(root, text="SUBJECT NAME: ")
-    subject_name_label.grid(row=3, column=0)
+    subject_name_label.grid(row=4, column=0)
 
     count_label = Label(root, text="NO OF PERIODS: ")
-    count_label.grid(row=4, column=0)
+    count_label.grid(row=5, column=0)
 
     subject_name_entry = Entry(root)
-    subject_name_entry.grid(row=3, column=1)
+    subject_name_entry.grid(row=4, column=1)
 
     count_entry = Entry(root)
-    count_entry.grid(row=4, column=1)
+    count_entry.grid(row=5, column=1)
 
     add_button = Button(root, text="ADD SUBJECT", command=add)
-    add_button.grid(row=5, column=0, columnspan=2)
-
-    add_button = Button(root, text="DELETE SUBJECT", command=delete)
     add_button.grid(row=6, column=0, columnspan=2)
+
+    delete_button = Button(root, text="DELETE SUBJECT", command=delete)
+    delete_button.grid(row=3, column=0, columnspan=2)
 
 root = Tk()
 Subject_Registration(root)

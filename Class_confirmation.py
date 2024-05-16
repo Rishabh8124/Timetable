@@ -3,6 +3,7 @@ import json
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+from Lab_list_confirmation import lab_confirmation
 
 def class_confirmation(root):
 
@@ -11,7 +12,7 @@ def class_confirmation(root):
 
         final_class_list = []
         subject_list = {
-            "subject_list": []
+            "subject_teacher_list": {}
         }
         json_object = json.dumps(subject_list, indent=4)
         
@@ -51,6 +52,8 @@ def class_confirmation(root):
 
         for widgets in root.winfo_children():
             widgets.destroy()
+        
+        lab_confirmation(root)
 
     def delete_command(index):
         current = classes[index].selection()

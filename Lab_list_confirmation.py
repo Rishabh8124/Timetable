@@ -86,7 +86,3 @@ def lab_confirmation(root):
     
     add_button = Button(root, text="ADD", command=add)
     add_button.grid(row=4, column=0, columnspan=2, sticky=W+E)
-
-root = Tk()
-lab_confirmation(root)
-root.mainloop()
