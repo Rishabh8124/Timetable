@@ -3,7 +3,16 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 
-def subject_teacher_assignment(root):
+def subject_teacher_assignment(root, button1, button2, button3):
+
+    def back():
+        for widget in root.winfo_children():
+            if widget not in [button1, button2, button3]:
+                widget.destroy()
+
+        button1.grid(row=0, column=0)
+        button2.grid(row=1, column=0)
+        button3.grid(row=2, column=0)
 
     def back_window(frame):
         frame.destroy()
@@ -294,6 +303,11 @@ def subject_teacher_assignment(root):
         save_button.config(state=NORMAL)
     
     def save_details():
+
+        file = open('./Academic_years/'+academic_year+".json", 'r')
+        json_object = json.load(file)
+        file.close()
+
         subject = subject_name_entry.get()
         count = count_entry.get()
         consecutive_periods = 1
@@ -312,30 +326,32 @@ def subject_teacher_assignment(root):
         if checkbutton_4_var.get() and consecutive_periods.isnumeric() == False:
             messagebox.showwarning("WARNING", "CONSECUTIVE PERIODS SHOULD BE AN INTEGER")
             return
-        
-        details = [subject, count, selected_teacher_list, selected_lab_list, selected_class_list, consecutive_periods, 1*checkbutton_3_var.get()+2*checkbutton_5_var.get()]
-        for i in subject_registered.get_children():
-            if subject == i:
-                confirm = messagebox.askyesno("WARNING", "SAVE CHANGES")
+
+        for class_added in selected_class_list:
+            if json_object[class_added]["subject_teacher_list"].get(subject, False):
+                confirm = messagebox.askyesno("CONFIRM", "CLASS "+class_added+" HAS THIS SUBJECT REGISTERED. DO YOU WANT TO SAVE CHANGES?")
                 if not confirm:
                     return
-                else:
-                    subject_registered.delete(subject)
+        
+        class_name = class_dropdown.get()
+        if subject in subject_registered.get_children():
+            subject_registered.delete(subject)
+            old_details = json_object[class_name]["subject_teacher_list"][subject]
+            for class_added in old_details[4]:
+                if class_added not in selected_class_list:
+                    json_object[class_added]["subject_teacher_list"].pop(subject)
+        
+        details = [subject, count, selected_teacher_list, selected_lab_list, selected_class_list, consecutive_periods, 1*checkbutton_3_var.get()+2*checkbutton_5_var.get()]
         
         subject_registered.insert(parent='', text='', index=END, iid=subject, value=details)
-
-        class_name = class_dropdown.get()
 
         for class_added in classes_list_tree.get_children():
             classes_list_tree.delete(class_added)
         
         classes_list_tree.insert(parent='', index=END, iid=class_name, text='', value=class_name)
 
-        file = open('./Academic_years/'+academic_year+".json", 'r')
-        json_object = json.load(file)
-        file.close()
-
-        json_object[class_name]["subject_teacher_list"][subject] = details
+        for class_added in selected_class_list:
+            json_object[class_added]["subject_teacher_list"][subject] = details
 
         with open('./Academic_years/'+academic_year+".json", 'w') as file:
             file.write(json.dumps(json_object, indent=4))
@@ -358,7 +374,9 @@ def subject_teacher_assignment(root):
         selected_teacher_list.clear()
         selected_lab_list.clear()
         selected_class_list.clear()
+
         selected_class_list.append(class_name)
+
         add_teacher_button.config(state=NORMAL)
         add_class_button.config(state=DISABLED)
         delete_class_button.config(state=DISABLED)
@@ -382,11 +400,18 @@ def subject_teacher_assignment(root):
 
         for teacher in teachers_list_tree.get_children():
             teachers_list_tree.delete(teacher)
+        
+        for class_added in selected_class_list:
+            if (class_added != class_name): classes_list_tree.delete(class_added)
+        selected_class_list.clear()
+        selected_class_list.append(class_name)
 
         selected_teacher_list.clear()
         add_teacher_button.config(state=NORMAL)
+
         add_class_button.config(state=DISABLED)
         delete_class_button.config(state=DISABLED)
+
         consecutive_periods_entry.delete(0, END)
         consecutive_periods_entry.config(state=DISABLED)
 
@@ -418,9 +443,10 @@ def subject_teacher_assignment(root):
             checkbutton_2.select()
             delete_class_button.config(state=NORMAL)
             add_class_button.config(state=NORMAL)
-            for class_selected in selected_list[4][1:]:
-                selected_class_list.append(class_selected)
-                classes_list_tree.insert(parent='', index=END, iid=class_selected, text='', value=class_selected)
+            for class_selected in selected_list[4]:
+                if class_selected != class_name:
+                    selected_class_list.append(class_selected)
+                    classes_list_tree.insert(parent='', index=END, iid=class_selected, text='', value=class_selected)
         else:
             delete_class_button.config(state=DISABLED)
             add_class_button.config(state=DISABLED)
@@ -451,7 +477,9 @@ def subject_teacher_assignment(root):
         with open('./Academic_years/'+academic_year+".json", 'r') as file:
             json_object = json.load(file)
         
-        json_object[class_name]["subject_teacher_list"].pop(selected_subject)
+        classes = json_object[class_name]["subject_teacher_list"][selected_subject][4]
+        for class_added in classes:
+            json_object[class_added]["subject_teacher_list"].pop(selected_subject)
 
         with open('./Academic_years/'+academic_year+".json", 'w') as file:
             file.write(json.dumps(json_object, indent=4))
@@ -633,6 +661,5 @@ def subject_teacher_assignment(root):
     save_button = Button(root, text="SAVE DETAILS", command=save_details, state=DISABLED)
     save_button.grid(row=15, column=0, columnspan=3)
 
-root = Tk()
-subject_teacher_assignment(root)
-root.mainloop()
+    back_button = Button(root, text="BACK", command=back)
+    back_button.grid(row=16, column=0, columnspan=3)

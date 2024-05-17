@@ -3,14 +3,23 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 
-def Teacher_Confirmation(root):
+def Teacher_Confirmation(root, button1, button2, button3):
+
+    def confirm():
+        for widget in root.winfo_children():
+            if widget not in [button1, button2, button3]:
+                widget.destroy()
+
+        button1.grid(row=0, column=0)
+        button2.grid(row=1, column=0)
+        button3.grid(row=2, column=0)
 
     def add():
         id = Id_entry.get()
         name = name_entry.get()
 
         if (not id):
-            messagebox.showwarning("WARNING", "TEACHER OD CANNOT BE EMPTY")
+            messagebox.showwarning("WARNING", "TEACHER ID CANNOT BE EMPTY")
             return
         
         if (not name):
@@ -82,9 +91,6 @@ def Teacher_Confirmation(root):
     teacher_list = json.load(file)["teacher_list"]
     file.close()
 
-    for widget in root.winfo_children():
-        widget.grid_forget()
-
     list_frame = Frame(root)
     list_frame.grid(row=0, column=0, columnspan=2)
 
@@ -127,6 +133,5 @@ def Teacher_Confirmation(root):
     add_button = Button(root, text="ADD", command=add)
     add_button.grid(row=4, column=0, columnspan=2, sticky=W+E)
 
-root = Tk()
-Teacher_Confirmation(root)
-root.mainloop()
+    back_button = Button(root, text="BACK", command=confirm)
+    back_button.grid(row=5, column=0, columnspan=2, sticky=W+E)

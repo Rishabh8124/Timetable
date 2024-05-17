@@ -1,18 +1,6 @@
 {
     "1A": {
-        "subject_teacher_list": {
-            "English": [
-                "English",
-                "8",
-                [],
-                [],
-                [
-                    "1A"
-                ],
-                1,
-                0
-            ]
-        }
+        "subject_teacher_list": {}
     },
     "1B": {
         "subject_teacher_list": {}

@@ -4,11 +4,12 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 from Class_confirmation import class_confirmation
+from Main_window import main_window
 
 academic_year_temp = os.popen('ls ./Academic_years')
 academic_year_list = []
 for folder in academic_year_temp:
-    academic_year_list.append(folder[:-1].lower())
+    academic_year_list.append(folder[:-6].lower())
 
 def Academic_year_window(root) :    
 
@@ -28,6 +29,8 @@ def Academic_year_window(root) :
                 confirm_choose.destroy()
                 choose_button.destroy()
                 create_button.destroy()
+
+                main_window(root)
 
         choose_button.grid_forget()
         create_button.grid_forget()
