@@ -51,7 +51,7 @@ def Academic_year_window(root) :
             elif (academic_year in academic_year_list):
                 messagebox.showwarning("WARNING", "ACADEMIC YEAR ALREADY EXISTS")
             else:
-                os.popen('mkdir ./Academic_years/'+academic_year)
+                os.popen('touch ./Academic_years/'+academic_year+".json")
 
                 with open("temp.json", 'w') as file:
                     json_object = json.dumps({"academic_year": academic_year}, indent=4)

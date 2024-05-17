@@ -11,11 +11,17 @@ def subject_teacher_assignment(root):
         add_teacher_button.grid(row=9, column=1)
         delete_teacher_button.grid(row=9, column=2)
 
+    def back_window_1(frame):
+        frame.destroy()
+
+        add_labs_button.grid(row=11, column=1)
+        delete_labs_button.grid(row=11, column=2)
+
     def back_window_2(frame):
         frame.destroy()
 
-        add_class_button.grid(row=12, column=1)
-        delete_class_button.grid(row=12, column=2)
+        add_class_button.grid(row=13, column=1)
+        delete_class_button.grid(row=13, column=2)
 
     def add_teacher_window(dropdown, frame):
         teacher_selected = dropdown.get()
@@ -40,7 +46,7 @@ def subject_teacher_assignment(root):
         add_teacher_button.grid_forget()
         delete_teacher_button.grid_forget()
 
-        with open("./Academic_years/"+academic_year+"/Teacher_list.json", 'r') as file:
+        with open("./Academic_years/"+academic_year+".json", 'r') as file:
             json_object = json.load(file)
             teacher_list = [i[0]+'-'+i[1] for i in json_object["teacher_list"]]
             for j in selected_teacher_list:
@@ -68,6 +74,53 @@ def subject_teacher_assignment(root):
         else:
             messagebox.showwarning("WARNING", "SELECT A TEACHER TO DELETE")
 
+    def add_labs_window(dropdown, frame):
+        lab_selected = dropdown.get()
+        if (lab_selected):
+            selected_lab_list.append(lab_selected)
+
+            labs_list_tree.insert(parent='', index=END, iid=lab_selected, text='', value=[lab_selected])
+
+            frame.destroy()
+
+            add_labs_button.grid(row=11, column=1)
+            delete_labs_button.grid(row=11, column=2)
+
+        elif lab_selected:
+            messagebox.showwarning("WARNING", "TEACHER HAS BEEN ASSIGNED")
+        else:
+            messagebox.showwarning("WARNING", "SELECT A TEACHER")
+
+    def add_lab():
+        add_labs_button.grid_forget()
+        delete_labs_button.grid_forget()
+
+        with open("./Academic_years/"+academic_year+".json", 'r') as file:
+            json_object = json.load(file)
+            lab_list = json_object["lab_list"]
+            for j in selected_lab_list:
+                lab_list.remove(j)
+
+        add_lab_frame = Frame(root)
+        add_lab_frame.grid(row=11, column=0, columnspan=3)
+
+        lab_list_dropdown = ttk.Combobox(add_lab_frame, value=lab_list)
+        lab_list_dropdown.grid(row=0, column=0)
+
+        add_button = Button(add_lab_frame, text="ADD LAB", command=lambda: add_labs_window(lab_list_dropdown, add_lab_frame))
+        add_button.grid(row=0, column=1)
+
+        back_button = Button(add_lab_frame, text="BACK", command=lambda: back_window_1(add_lab_frame))
+        back_button.grid(row=0, column=2)
+
+    def delete_lab():
+        lab_selected = labs_list_tree.focus()
+        if lab_selected:
+            selected_lab_list.remove(lab_selected)
+            labs_list_tree.delete(lab_selected)
+        else:
+            messagebox.showwarning("WARNING", "SELECT A LAB TO DELETE")
+
     def add_class_window(dropdown, frame):
         class_selected = dropdown.get()
         if class_selected:
@@ -75,8 +128,8 @@ def subject_teacher_assignment(root):
             classes_list_tree.insert(parent='', index=END, iid=class_selected, text='', value=class_selected)
             frame.destroy()
 
-            add_class_button.grid(row=12, column=1)
-            delete_class_button.grid(row=12, column=2)
+            add_class_button.grid(row=13, column=1)
+            delete_class_button.grid(row=13, column=2)
             delete_class_button.config(state=NORMAL)
 
         else:
@@ -91,7 +144,7 @@ def subject_teacher_assignment(root):
             new_class_list.remove(j)
 
         add_class_frame = Frame(root)
-        add_class_frame.grid(row=12, column=0, columnspan=3)
+        add_class_frame.grid(row=13, column=0, columnspan=3)
 
         class_list_dropdown = ttk.Combobox(add_class_frame, value=new_class_list)
         class_list_dropdown.grid(row=0, column=0)
@@ -119,9 +172,12 @@ def subject_teacher_assignment(root):
 
     def lab_entry():
         if checkbutton_1_var.get() == 1:
-            lab_entry_box.config(state=NORMAL)
+            add_labs_button.config(state=NORMAL)
         else:
-            lab_entry_box.config(state=DISABLED)
+            if len(selected_lab_list):
+                pass
+            else:
+                add_labs_button.config(state=DISABLED)
 
     def combined_teacher_check():
         if (checkbutton_3_var.get() == 0):
@@ -158,8 +214,7 @@ def subject_teacher_assignment(root):
                     checkbutton_2.select()
             else:
                 add_class_button.config(state=DISABLED)
-
-    
+  
     def seperate_teachers_check():
         if checkbutton_5_var.get():
             if checkbutton_3_var.get() == 0:
@@ -199,11 +254,11 @@ def subject_teacher_assignment(root):
         
         classes_list_tree.insert(parent='', index=END, iid=class_name, text='', value=class_name)
 
-        file = open('./Academic_years/'+academic_year+'/Class/'+class_name+".json", 'r')
+        file = open('./Academic_years/'+academic_year+".json", 'r')
         json_object = json.load(file)
         file.close()
 
-        subject_list_1 = json_object["subject_teacher_list"]
+        subject_list_1 = json_object[class_name]["subject_teacher_list"]
 
         for subject in subject_registered.get_children():
             subject_registered.delete(subject)
@@ -217,8 +272,10 @@ def subject_teacher_assignment(root):
         checkbutton_4.deselect()
         checkbutton_5.deselect()
 
-        lab_entry_box.config(state=DISABLED)
-        lab_entry_box.set("")
+        add_labs_button.config(state=DISABLED)
+        for lab in selected_lab_list:
+            labs_list_tree.delete(lab)
+        selected_lab_list.clear()
 
         subject_name_entry.delete(0, END)
         count_entry.delete(0, END)
@@ -239,9 +296,6 @@ def subject_teacher_assignment(root):
     def save_details():
         subject = subject_name_entry.get()
         count = count_entry.get()
-        lab_name = ""
-        if (checkbutton_1_var.get()): 
-            lab_name = lab_entry_box.get()
         consecutive_periods = 1
         if (checkbutton_4_var.get()):
             consecutive_periods = consecutive_periods_entry.get()
@@ -252,14 +306,14 @@ def subject_teacher_assignment(root):
         if count.isnumeric() == False:
             messagebox.showwarning("WARNING", "COUNT SHOULD BE AN INTEGER")
             return
-        if checkbutton_1_var.get() and lab_name == '':
+        if checkbutton_1_var.get() and selected_lab_list == []:
             messagebox.showwarning("WARNING", "LAB NAME IS EMPTY")
             return
         if checkbutton_4_var.get() and consecutive_periods.isnumeric() == False:
             messagebox.showwarning("WARNING", "CONSECUTIVE PERIODS SHOULD BE AN INTEGER")
             return
         
-        details = [subject, count, selected_teacher_list, lab_name, selected_class_list, consecutive_periods, 1*checkbutton_3_var.get()+2*checkbutton_5_var.get()]
+        details = [subject, count, selected_teacher_list, selected_lab_list, selected_class_list, consecutive_periods, 1*checkbutton_3_var.get()+2*checkbutton_5_var.get()]
         for i in subject_registered.get_children():
             if subject == i:
                 confirm = messagebox.askyesno("WARNING", "SAVE CHANGES")
@@ -277,14 +331,14 @@ def subject_teacher_assignment(root):
         
         classes_list_tree.insert(parent='', index=END, iid=class_name, text='', value=class_name)
 
-        file = open('./Academic_years/'+academic_year+'/Class/'+class_name+".json", 'r')
+        file = open('./Academic_years/'+academic_year+".json", 'r')
         json_object = json.load(file)
         file.close()
 
-        json_object["subject_teacher_list"][subject] = details
+        json_object[class_name]["subject_teacher_list"][subject] = details
 
-        with open('./Academic_years/'+academic_year+'/Class/'+class_name+".json", 'w') as file:
-            file.write(json.dumps(json_object))
+        with open('./Academic_years/'+academic_year+".json", 'w') as file:
+            file.write(json.dumps(json_object, indent=4))
 
         checkbutton_1.deselect()
         checkbutton_2.deselect()
@@ -295,13 +349,14 @@ def subject_teacher_assignment(root):
         subject_name_entry.delete(0, END)
         count_entry.delete(0, END)
 
-        lab_entry_box.set("")
-        lab_entry_box.config(state=DISABLED)
+        for lab in selected_lab_list:
+            labs_list_tree.delete(lab)
 
         for teacher in teachers_list_tree.get_children():
             teachers_list_tree.delete(teacher)
 
         selected_teacher_list.clear()
+        selected_lab_list.clear()
         selected_class_list.clear()
         selected_class_list.append(class_name)
         add_teacher_button.config(state=NORMAL)
@@ -313,8 +368,8 @@ def subject_teacher_assignment(root):
     def edit_details():
         class_name = class_dropdown.get()
 
-        with open('./Academic_years/'+academic_year+'/Class/'+class_name+".json", 'r') as file:
-            subject_list = json.load(file)["subject_teacher_list"]
+        with open('./Academic_years/'+academic_year+".json", 'r') as file:
+            subject_list = json.load(file)[class_name]["subject_teacher_list"]
 
         checkbutton_1.deselect()
         checkbutton_2.deselect()
@@ -327,6 +382,7 @@ def subject_teacher_assignment(root):
 
         for teacher in teachers_list_tree.get_children():
             teachers_list_tree.delete(teacher)
+
         selected_teacher_list.clear()
         add_teacher_button.config(state=NORMAL)
         add_class_button.config(state=DISABLED)
@@ -346,13 +402,17 @@ def subject_teacher_assignment(root):
             selected_teacher_list.append(teacher)
             teachers_list_tree.insert(parent='', index=END, iid=teacher.split('-')[0], text='', value=teacher)
 
+        for lab in selected_lab_list:
+            labs_list_tree.delete(lab)
+        selected_lab_list.clear()
+
         if selected_list[3]:
             checkbutton_1.select()
-            lab_entry_box.config(state=NORMAL)
-            lab_entry_box.current(lab_list.index(selected_list[3]))
+            for lab in selected_list[3]:
+                selected_lab_list.append(lab)
+                labs_list_tree.insert(parent='', text='', index=END, iid=lab, value=[lab])
         else:
-            lab_entry_box.set("")
-            lab_entry_box.config(state=DISABLED)
+            pass
         
         if len(selected_list[4]) > 1:
             checkbutton_2.select()
@@ -377,7 +437,7 @@ def subject_teacher_assignment(root):
             checkbutton_5.select()
             add_teacher_button.config(state=NORMAL)
         else:
-            add_teacher_button.config(state=DISABLED)
+            if len(selected_list[2]): add_teacher_button.config(state=DISABLED)
 
     def clear_details():
         selected_subject = subject_registered.focus()
@@ -388,22 +448,23 @@ def subject_teacher_assignment(root):
         subject_registered.delete(selected_subject)
         class_name = class_dropdown.get()
 
-        with open('./Academic_years/'+academic_year+'/Class/'+class_name+".json", 'r') as file:
+        with open('./Academic_years/'+academic_year+".json", 'r') as file:
             json_object = json.load(file)
         
-        json_object["subject_teacher_list"].pop(selected_subject)
+        json_object[class_name]["subject_teacher_list"].pop(selected_subject)
 
-        with open('./Academic_years/'+academic_year+'/Class/'+class_name+".json", 'w') as file:
-            file.write(json.dumps(json_object))
+        with open('./Academic_years/'+academic_year+".json", 'w') as file:
+            file.write(json.dumps(json_object, indent=4))
 
     selected_teacher_list = []
     selected_class_list = []
+    selected_lab_list = []
     
     with open("temp.json") as file:
         json_object = json.load(file)
         academic_year = json_object["academic_year"]
     
-    with open("./Academic_years/"+academic_year+"/Class_list.json") as file:
+    with open("./Academic_years/"+academic_year+".json") as file:
         json_object = json.load(file)
         class_list = json_object["class_list"]
         class_list_combined = []
@@ -411,8 +472,6 @@ def subject_teacher_assignment(root):
         for i in class_list:
             class_list_combined.extend(i)
 
-    with open("./Academic_years/"+academic_year+"/Lab_list.json") as file:
-        json_object = json.load(file)
         lab_list = json_object["lab_list"]
    
     class_division = {"Primary": 0, "Secondary": 1, "Higher Secondary": 2}
@@ -446,7 +505,7 @@ def subject_teacher_assignment(root):
     subject_registered.column("TEACHERS", anchor=CENTER)
     subject_registered.heading("TEACHERS", text="TEACHERS", anchor=CENTER)
 
-    subject_registered.column("LAB", width=120, anchor=CENTER)
+    subject_registered.column("LAB", width=200, anchor=CENTER)
     subject_registered.heading("LAB", text="LAB", anchor=CENTER)
 
     subject_registered.column("COMBINED CLASS", width=150, anchor=CENTER)
@@ -510,17 +569,38 @@ def subject_teacher_assignment(root):
 
     checkbutton_1_var = IntVar()
     checkbutton_1 = Checkbutton(root, text="LAB", variable=checkbutton_1_var, onvalue=1, offvalue=0, command=lab_entry)
-    checkbutton_1.grid(row=10, column=0)
+    checkbutton_1.grid(row=10, column=0, rowspan=2)
 
-    lab_entry_box = ttk.Combobox(root, value=lab_list, state=DISABLED)
-    lab_entry_box.grid(row=10, column=1, columnspan=2)
+    labs_frame = Frame(root)
+    labs_frame.grid(row=10, column=1, columnspan=2)
+
+    labs_scroll = Scrollbar(labs_frame, orient=VERTICAL)
+    labs_scroll.pack(side=RIGHT, fill='y')
+
+    labs_list_tree = ttk.Treeview(labs_frame, height=5, yscrollcommand=labs_scroll.set)
+    labs_list_tree.pack()
+
+    labs_scroll.config(command=labs_list_tree.yview)
+
+    labs_list_tree["columns"] = ("LABS")
+
+    labs_list_tree.column("#0", width=0, stretch=NO)
+
+    labs_list_tree.column("LABS", anchor=CENTER)
+    labs_list_tree.heading("LABS", text="LABS", anchor=CENTER)
+
+    add_labs_button = Button(root, text="ADD LAB", command=add_lab, state=DISABLED)
+    add_labs_button.grid(row=11, column=1)
+
+    delete_labs_button = Button(root, text="DELETE LAB", command=delete_lab)
+    delete_labs_button.grid(row=11, column=2)
 
     checkbutton_2_var = IntVar()
     checkbutton_2 = Checkbutton(root, text="COMBINED CLASS", onvalue=1, offvalue=0, variable=checkbutton_2_var, command=combined_class_check)
-    checkbutton_2.grid(row=11, column=0)
+    checkbutton_2.grid(row=12, column=0)
 
     classes_frame = Frame(root)
-    classes_frame.grid(row=11, column=1, columnspan=2)
+    classes_frame.grid(row=12, column=1, columnspan=2)
 
     classes_scroll = Scrollbar(classes_frame, orient=VERTICAL)
     classes_scroll.pack(side=RIGHT, fill='y')
@@ -538,20 +618,20 @@ def subject_teacher_assignment(root):
     classes_list_tree.heading("CLASSES", text="CLASSES", anchor=CENTER)
 
     add_class_button = Button(root, text="ADD CLASS", command=add_class, state=DISABLED)
-    add_class_button.grid(row=12, column=1)
+    add_class_button.grid(row=13, column=1)
 
     delete_class_button = Button(root, text="DELETE CLASS", command=delete_class, state=DISABLED)
-    delete_class_button.grid(row=12, column=2)
+    delete_class_button.grid(row=13, column=2)
 
     checkbutton_4_var = IntVar()
     checkbutton_4 = Checkbutton(root, text="CONSECUTIVE PERIODS", onvalue=1, offvalue=0, variable=checkbutton_4_var, command=consecutive_periods_check)
-    checkbutton_4.grid(row=13, column=0)
+    checkbutton_4.grid(row=14, column=0)
 
     consecutive_periods_entry = Entry(root, state=DISABLED)
-    consecutive_periods_entry.grid(row=13, column=1, columnspan=2)
+    consecutive_periods_entry.grid(row=14, column=1, columnspan=2)
 
     save_button = Button(root, text="SAVE DETAILS", command=save_details, state=DISABLED)
-    save_button.grid(row=14, column=0, columnspan=3)
+    save_button.grid(row=15, column=0, columnspan=3)
 
 root = Tk()
 subject_teacher_assignment(root)

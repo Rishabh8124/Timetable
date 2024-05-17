@@ -36,10 +36,15 @@ def Teacher_Confirmation(root):
         teacher_list.append([id, name])
         teacher_list_tree.insert(parent='', index=END, iid=id, value=[id, name], text='')
 
-        file = open("./Academic_years/"+academic_year+"/Teacher_list.json", 'w')
-        file.write(json.dumps({
-            "teacher_list": teacher_list
-        }))
+        file = open("./Academic_years/"+academic_year+".json", 'r')
+        file_data = json.load(file)
+        file.close()
+
+        file_data["teacher_list"] = teacher_list
+        file_data[id+"-"+name] = {}
+        
+        file = open("./Academic_years/"+academic_year+".json", 'w')
+        file.write(json.dumps(file_data, indent=4))
         file.close()
 
         Id_entry.delete(0, END)
@@ -56,17 +61,24 @@ def Teacher_Confirmation(root):
         teacher_list.remove(selected)
         teacher_list_tree.delete(selection)
 
-        file = open("./Academic_years/"+academic_year+"/Teacher_list.json", 'w')
-        file.write(json.dumps({
-            "teacher_list": teacher_list
-        }))
+        file = open("./Academic_years/"+academic_year+".json", 'r')
+        file_data = json.load(file)
+        file.close()
+
+        file_data["teacher_list"] = teacher_list
+        file_data.pop(selected[0]+"-"+selected[1])
+        
+        file = open("./Academic_years/"+academic_year+".json", 'w')
+        file.write(json.dumps(file_data, indent=4))
+        file.close()
+
         file.close()
 
     with open('temp.json', 'r') as file:
         json_object = json.load(file)
         academic_year = json_object['academic_year']
 
-    file = open("./Academic_years/"+academic_year+"/Teacher_list.json", 'r')
+    file = open("./Academic_years/"+academic_year+".json", 'r')
     teacher_list = json.load(file)["teacher_list"]
     file.close()
 

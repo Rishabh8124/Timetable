@@ -1,0 +1,221 @@
+{
+    "1A": {
+        "subject_teacher_list": {
+            "English": [
+                "English",
+                "8",
+                [],
+                [],
+                [
+                    "1A"
+                ],
+                1,
+                0
+            ]
+        }
+    },
+    "1B": {
+        "subject_teacher_list": {}
+    },
+    "1C": {
+        "subject_teacher_list": {}
+    },
+    "1D": {
+        "subject_teacher_list": {}
+    },
+    "2A": {
+        "subject_teacher_list": {}
+    },
+    "2B": {
+        "subject_teacher_list": {}
+    },
+    "2C": {
+        "subject_teacher_list": {}
+    },
+    "2D": {
+        "subject_teacher_list": {}
+    },
+    "3A": {
+        "subject_teacher_list": {}
+    },
+    "3B": {
+        "subject_teacher_list": {}
+    },
+    "3C": {
+        "subject_teacher_list": {}
+    },
+    "3D": {
+        "subject_teacher_list": {}
+    },
+    "4A": {
+        "subject_teacher_list": {}
+    },
+    "4B": {
+        "subject_teacher_list": {}
+    },
+    "4C": {
+        "subject_teacher_list": {}
+    },
+    "4D": {
+        "subject_teacher_list": {}
+    },
+    "5A": {
+        "subject_teacher_list": {}
+    },
+    "5B": {
+        "subject_teacher_list": {}
+    },
+    "5C": {
+        "subject_teacher_list": {}
+    },
+    "5D": {
+        "subject_teacher_list": {}
+    },
+    "6A": {
+        "subject_teacher_list": {}
+    },
+    "6B": {
+        "subject_teacher_list": {}
+    },
+    "6C": {
+        "subject_teacher_list": {}
+    },
+    "6D": {
+        "subject_teacher_list": {}
+    },
+    "7A": {
+        "subject_teacher_list": {}
+    },
+    "7B": {
+        "subject_teacher_list": {}
+    },
+    "7C": {
+        "subject_teacher_list": {}
+    },
+    "7D": {
+        "subject_teacher_list": {}
+    },
+    "8A": {
+        "subject_teacher_list": {}
+    },
+    "8B": {
+        "subject_teacher_list": {}
+    },
+    "8C": {
+        "subject_teacher_list": {}
+    },
+    "8D": {
+        "subject_teacher_list": {}
+    },
+    "9A": {
+        "subject_teacher_list": {}
+    },
+    "9B": {
+        "subject_teacher_list": {}
+    },
+    "9C": {
+        "subject_teacher_list": {}
+    },
+    "9D": {
+        "subject_teacher_list": {}
+    },
+    "10A": {
+        "subject_teacher_list": {}
+    },
+    "10B": {
+        "subject_teacher_list": {}
+    },
+    "10C": {
+        "subject_teacher_list": {}
+    },
+    "10D": {
+        "subject_teacher_list": {}
+    },
+    "11A": {
+        "subject_teacher_list": {}
+    },
+    "11B": {
+        "subject_teacher_list": {}
+    },
+    "11C": {
+        "subject_teacher_list": {}
+    },
+    "12A": {
+        "subject_teacher_list": {}
+    },
+    "12B": {
+        "subject_teacher_list": {}
+    },
+    "12C": {
+        "subject_teacher_list": {}
+    },
+    "class_list": [
+        [
+            "1A",
+            "1B",
+            "1C",
+            "1D",
+            "2A",
+            "2B",
+            "2C",
+            "2D",
+            "3A",
+            "3B",
+            "3C",
+            "3D",
+            "4A",
+            "4B",
+            "4C",
+            "4D",
+            "5A",
+            "5B",
+            "5C",
+            "5D"
+        ],
+        [
+            "6A",
+            "6B",
+            "6C",
+            "6D",
+            "7A",
+            "7B",
+            "7C",
+            "7D",
+            "8A",
+            "8B",
+            "8C",
+            "8D",
+            "9A",
+            "9B",
+            "9C",
+            "9D",
+            "10A",
+            "10B",
+            "10C",
+            "10D"
+        ],
+        [
+            "11A",
+            "11B",
+            "11C",
+            "12A",
+            "12B",
+            "12C"
+        ]
+    ],
+    "teacher_list": [],
+    "lab_list": [
+        "Physics Lab",
+        "Chemistry Lab",
+        "CS Lab 1",
+        "CS Lab 2",
+        "Biology Lab",
+        "Library"
+    ],
+    "Physics Lab": {},
+    "Chemistry Lab": {},
+    "CS Lab 1": {},
+    "CS Lab 2": {},
+    "Biology Lab": {},
+    "Library": {}
+}

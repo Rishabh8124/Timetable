@@ -8,46 +8,22 @@ from Lab_list_confirmation import lab_confirmation
 def class_confirmation(root):
 
     def confirm():
-        os.popen('mkdir ./Academic_years/'+academic_year+'/Class')
-
+        academic_year_dictionary = {}
         final_class_list = []
-        subject_list = {
-            "subject_teacher_list": {}
-        }
-        json_object = json.dumps(subject_list, indent=4)
         
         for item in class_list:
-            final_class_list.append(item)
+            final_class_list.append(item)            
             for cl in item:
-                os.popen("touch ./Academic_years/"+academic_year+"/Class/"+cl+".json")
-            
-            for cl in item:
-                file = open("./Academic_years/"+academic_year+"/Class/"+cl+".json", 'w')
-                file.write(json_object)
-                file.close()
-        
-        file = open("./Academic_years/"+academic_year+"/Class_list.json", 'w')
-        class_json = {
-            "class_list": final_class_list
-        }
-        json_object = json.dumps(class_json, indent=4)
-        file.write(json_object)
-        file.close()
+                academic_year_dictionary[cl] = {
+                    "subject_teacher_list": {}
+                }
 
-        file = open("./Academic_years/"+academic_year+"/Teacher_list.json", 'w')
-        class_json = {
-            "teacher_list": []
-        }
-        json_object = json.dumps(class_json, indent=4)
-        file.write(json_object)
-        file.close()
+        academic_year_dictionary["class_list"] = final_class_list
+        academic_year_dictionary["teacher_list"] = []
+        academic_year_dictionary["lab_list"] = []
 
-        file = open("./Academic_years/"+academic_year+"/Lab_list.json", 'w')
-        class_json = {
-            "lab_list": []
-        }
-        json_object = json.dumps(class_json, indent=4)
-        file.write(json_object)
+        file = open("./Academic_years/"+academic_year+".json", 'w')
+        file.write(json.dumps(academic_year_dictionary, indent=4))
         file.close()
 
         for widgets in root.winfo_children():

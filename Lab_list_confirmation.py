@@ -1,3 +1,4 @@
+import os
 import json
 from tkinter import *
 from tkinter import ttk
@@ -19,10 +20,15 @@ def lab_confirmation(root):
         lab_list.append(name)
         lab_list_tree.insert(parent='', index=END, iid=name, value=[name], text='')
 
-        file = open("./Academic_years/"+academic_year+"/Lab_list.json", 'w')
-        file.write(json.dumps({
-            "lab_list": lab_list
-        }))
+        file = open("./Academic_years/"+academic_year+".json", 'r')
+        file_data = json.load(file)
+        file.close()
+
+        file_data["lab_list"] = lab_list
+        file_data[name] = {}
+
+        file = open("./Academic_years/"+academic_year+".json", 'w')
+        file.write(json.dumps(file_data, indent=4))
         file.close()
 
         name_entry.delete(0, END)
@@ -37,17 +43,27 @@ def lab_confirmation(root):
         lab_list.remove(selection)
         lab_list_tree.delete(selection)
 
-        file = open("./Academic_years/"+academic_year+"/Lab_list.json", 'w')
-        file.write(json.dumps({
-            "lab_list": lab_list
-        }))
+        file = open("./Academic_years/"+academic_year+".json", 'r')
+        file_data = json.load(file)
         file.close()
+
+        file_data["lab_list"] = lab_list
+        file_data.pop(selection)
+
+        file = open("./Academic_years/"+academic_year+".json", 'w')
+        file.write(json.dumps(file_data, indent=4))
+        file.close()
+
+    def finalize():
+        
+        for widget in root.winfo_children():
+            widget.destroy()
 
     with open('temp.json', 'r') as file:
         json_object = json.load(file)
         academic_year = json_object['academic_year']
 
-    file = open("./Academic_years/"+academic_year+"/Lab_list.json", 'r')
+    file = open("./Academic_years/"+academic_year+".json", 'r')
     lab_list = json.load(file)["lab_list"]
     file.close()
 
@@ -71,9 +87,6 @@ def lab_confirmation(root):
 
     lab_list_tree.column("NAME", anchor=CENTER)
     lab_list_tree.heading("NAME", text="LAB NAME", anchor=CENTER)
-
-    for lab in lab_list:
-        lab_list_tree.insert(parent='', index=END, iid=lab, text='', value=[lab])
     
     delete_button = Button(root, text="DELETE", command=delete)
     delete_button.grid(row=1, column=0, columnspan=2, sticky=W+E)
@@ -86,3 +99,6 @@ def lab_confirmation(root):
     
     add_button = Button(root, text="ADD", command=add)
     add_button.grid(row=4, column=0, columnspan=2, sticky=W+E)
+
+    finalize_button = Button(root, text="FINALIZE", command=finalize)
+    finalize_button.grid(row=5, column=0, columnspan=2, sticky=W+E)
