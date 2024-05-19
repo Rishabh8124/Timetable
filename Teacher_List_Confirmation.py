@@ -50,7 +50,16 @@ def Teacher_Confirmation(root, button1, button2, button3):
         file.close()
 
         file_data["teacher_list"] = teacher_list
-        file_data[id+"-"+name] = {}
+        file_data[id+"-"+name] = {
+            "timetable" : [
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", ""]
+            ]
+        }
         
         file = open("./Academic_years/"+academic_year+".json", 'w')
         file.write(json.dumps(file_data, indent=4))

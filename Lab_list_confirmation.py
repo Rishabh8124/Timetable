@@ -3,6 +3,7 @@ import json
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+from Main_window import main_window
 
 def lab_confirmation(root):
     def add():
@@ -25,7 +26,16 @@ def lab_confirmation(root):
         file.close()
 
         file_data["lab_list"] = lab_list
-        file_data[name] = {}
+        file_data[name] = {
+            "timetable" : [
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", ""]
+            ]
+        }
 
         file = open("./Academic_years/"+academic_year+".json", 'w')
         file.write(json.dumps(file_data, indent=4))
@@ -58,6 +68,8 @@ def lab_confirmation(root):
         
         for widget in root.winfo_children():
             widget.destroy()
+        
+        main_window(root)
 
     with open('temp.json', 'r') as file:
         json_object = json.load(file)

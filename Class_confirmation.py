@@ -10,12 +10,21 @@ def class_confirmation(root):
     def confirm():
         academic_year_dictionary = {}
         final_class_list = []
+        timetable = [
+            ["", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", "", ""],
+            ["", "", "", "", "", "", ""]
+        ]
         
         for item in class_list:
             final_class_list.append(item)            
             for cl in item:
                 academic_year_dictionary[cl] = {
-                    "subject_teacher_list": {}
+                    "subject_teacher_list": {},
+                    "timetable": timetable
                 }
 
         academic_year_dictionary["class_list"] = final_class_list
