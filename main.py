@@ -1,5 +1,5 @@
 from tkinter import *
-from Academic_Year import *    
+from Academic_Year import *
 
 root = Tk()
 

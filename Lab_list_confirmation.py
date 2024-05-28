@@ -34,7 +34,7 @@ def lab_confirmation(root):
                 ["", "", "", "", "", "", "", ""],
                 ["", "", "", "", "", "", "", ""],
                 ["", "", "", "", "", "", ""]
-            ]
+            ], "class_list" : {}
         }
 
         file = open("./Academic_years/"+academic_year+".json", 'w')

@@ -36,9 +36,6 @@ def subject_teacher_assignment(root, button1, button2, button3):
         teacher_selected = dropdown.get()
         if (teacher_selected):
             selected_teacher_list.append(teacher_selected)
-            if (checkbutton_3_var.get() == 0 and checkbutton_5_var.get() == 0):
-                add_teacher_button.config(state=DISABLED)
-
             teachers_list_tree.insert(parent='', index=END, iid=teacher_selected.split('-')[0], text='', value=teacher_selected)
 
             frame.destroy()
@@ -189,20 +186,7 @@ def subject_teacher_assignment(root, button1, button2, button3):
                 add_labs_button.config(state=DISABLED)
 
     def combined_teacher_check():
-        if (checkbutton_3_var.get() == 0):
-            if (len(selected_teacher_list) == 0):
-                add_teacher_button.config(state=NORMAL)
-            elif (len(selected_teacher_list) > 1):
-                messagebox.showwarning("WARNING", "MULTIPLIE TEACHERS SELECTED. DELETE ADDITIONAL TEACHERS TO SWITCH OPTION")
-                checkbutton_3.select()
-            else:
-                add_teacher_button.config(state=DISABLED)
-        else:
-            if checkbutton_5_var.get() == 1:
-                messagebox.showwarning("WARNING", "TOGGLING OPTION FROM SEPERATE TEACHERS TO COMBINED TEACHERS")
-                checkbutton_5.deselect()
-            else:
-                add_teacher_button.config(state=NORMAL)
+        pass
     
     def combined_class_check():
         if checkbutton_2_var.get():
@@ -223,22 +207,6 @@ def subject_teacher_assignment(root, button1, button2, button3):
                     checkbutton_2.select()
             else:
                 add_class_button.config(state=DISABLED)
-  
-    def seperate_teachers_check():
-        if checkbutton_5_var.get():
-            if checkbutton_3_var.get() == 0:
-                add_teacher_button.config(state=NORMAL)
-            else:
-                messagebox.showwarning("WARNING", "TOGGLING OPTION FROM COMBINED TEACHERS TO SEPERATE TEACHERS")
-                checkbutton_3.deselect()
-        else:
-            if len(selected_teacher_list) == 1:
-                add_teacher_button.config(state=DISABLED)
-            elif len(selected_teacher_list) == 0:
-                pass
-            else:
-                messagebox.showwarning("WARNING", "MULTIPLIE TEACHERS SELECTED. DELETE ADDITIONAL TEACHERS TO SWITCH OPTION")
-                checkbutton_5.select()
     
     def consecutive_periods_check():
         if checkbutton_4_var.get():
@@ -279,7 +247,6 @@ def subject_teacher_assignment(root, button1, button2, button3):
         checkbutton_2.deselect()
         checkbutton_3.deselect()
         checkbutton_4.deselect()
-        checkbutton_5.deselect()
 
         add_labs_button.config(state=DISABLED)
         for lab in selected_lab_list:
@@ -326,7 +293,7 @@ def subject_teacher_assignment(root, button1, button2, button3):
         if checkbutton_4_var.get() and consecutive_periods.isnumeric() == False:
             messagebox.showwarning("WARNING", "CONSECUTIVE PERIODS SHOULD BE AN INTEGER")
             return
-
+        
         for class_added in selected_class_list:
             if json_object[class_added]["subject_teacher_list"].get(subject, False):
                 confirm = messagebox.askyesno("CONFIRM", "CLASS "+class_added+" HAS THIS SUBJECT REGISTERED. DO YOU WANT TO SAVE CHANGES?")
@@ -334,22 +301,111 @@ def subject_teacher_assignment(root, button1, button2, button3):
                     return
         
         class_name = class_dropdown.get()
+        details = [subject, count, selected_teacher_list, selected_lab_list, selected_class_list, consecutive_periods, checkbutton_3_var.get(), 0]
+
         if subject in subject_registered.get_children():
-            subject_registered.delete(subject)
             old_details = json_object[class_name]["subject_teacher_list"][subject]
+            details[-1] = old_details[-1]
+
+            if old_details[-1]:
+                if int(old_details[-1] > int(count)):
+                    messagebox.showwarning("WARNING", "Timetable slots have been assigned for this subject. New limit exceeds the current alloted slots")
+                    return
+
+                if old_details[3] != selected_lab_list:
+                    messagebox.showwarning("WARNING", "Timetable slots have been assigned for this subject. Lab list cannot be modified")
+                    return
+                
+                if old_details[4] != selected_class_list:
+                    messagebox.showwarning("WARNING", "Timetable slots have been assigned for this subject. Class list cannot be modified")
+                    return
+
+                teacher_condition = checkbutton_3_var.get()
+
+                if old_details[-2] != teacher_condition:
+                    messagebox.showwarning("WARNING", "Timetable slots have been assigned for this subject. Teacher assignment type cannot be changed")
+                    return
+                
+                elif old_details[2] != selected_teacher_list:
+                    if old_details[-2] == 0:
+                        if old_details[2]:
+                            if selected_teacher_list == []:
+                                current_timetable = json_object[class_name]["timetable"]
+                                for i in range(len(current_timetable)):
+                                    for j in range(len(current_timetable[i])):
+                                        if current_timetable[i][j] and current_timetable[i][j].split('::')[0] == subject:
+                                            json_object[current_timetable[i][j].split('::')[1]]["timetable"][i][j] = ""
+                                            current_timetable[i][j] = subject
+
+                            else:
+                                current_timetable = json_object[class_name]["timetable"]
+
+                                for i in range(len(current_timetable)):
+                                    for j in range(len(current_timetable[i])):
+                                        if current_timetable[i][j] and current_timetable[i][j].split('::')[0] == subject:
+                                            if current_timetable[i][j].split('::')[1] in old_details[2] and current_timetable[i][j].split('::')[1] not in selected_teacher_list:
+                                                messagebox.showwarning("WARNING", current_timetable[i][j].split('::')[1]+" has assigned slots for this subject.")
+                                                return
+
+                        else:
+                            if (len(selected_teacher_list) > 1):
+                                messagebox.showwarning("WARNING", "Ambiguity in assigning subject slots to teachers")
+                                return
+                            else:
+                                current_timetable = json_object[class_name]["timetable"]
+
+                                for i in range(len(current_timetable)):
+                                    for j in range(len(current_timetable[i])):
+                                        if current_timetable[i][j] == subject:
+                                            current_timetable[i][j] = subject+'::'+selected_teacher_list[0]
+                                            json_object[selected_teacher_list[0]]["timetable"][i][j] = selected_class_list
+
+                    else:
+                        current_timetable = json_object[class_name]["timetable"]
+
+                        for i in range(len(current_timetable)):
+                            for j in range(len(current_timetable[i])):
+                                if current_timetable[i][j] == subject:
+                                    for teachers in selected_teacher_list:
+                                        if teachers not in old_details[2] and json_object[teachers]["timetable"][i][j]:
+                                            messagebox.showwarning("WARNING", teachers+' has class aloted in slots of the subject')
+                                            return
+                        
+                        for i in range(len(current_timetable)):
+                            for j in range(len(current_timetable[i])):
+                                if current_timetable[i][j] == subject:
+                                    for teachers in old_details[2]:
+                                        json_object[teachers]["timetable"][i][j] = ''
+                                    for teachers in selected_teacher_list:
+                                        json_object[teachers]["timetable"][i][j] = selected_class_list
+
             for class_added in old_details[4]:
-                if class_added not in selected_class_list:
-                    json_object[class_added]["subject_teacher_list"].pop(subject)
+                json_object[class_added]["subject_teacher_list"].pop(subject)
+            
+            for teachers in old_details[2]:
+                json_object[teachers]['class_list'].get(subject, 0).remove(old_details[4])
+
+            for labs in old_details[3]:
+                json_object[labs]['class_list'].get(subject).remove(old_details[4])
         
-        details = [subject, count, selected_teacher_list, selected_lab_list, selected_class_list, consecutive_periods, 1*checkbutton_3_var.get()+2*checkbutton_5_var.get()]
-        
+            subject_registered.delete(subject)
+
         subject_registered.insert(parent='', text='', index=END, iid=subject, value=details)
 
         for class_added in classes_list_tree.get_children():
             classes_list_tree.delete(class_added)
-        
         classes_list_tree.insert(parent='', index=END, iid=class_name, text='', value=class_name)
-
+        
+        for teachers in selected_teacher_list:
+            subject_list = json_object[teachers]['class_list'].get(subject, [])
+            subject_list.append(selected_class_list)
+            json_object[teachers]["class_list"][subject] = subject_list
+        
+        for labs in selected_lab_list:
+            subject_list = json_object[lab]['class_list'].get(subject, [])
+            subject_list.append(selected_class_list)
+            json_object[labs]["class_list"][subject] = json_object[labs]['class_list'].get(subject, []).append(selected_class_list)
+        
         for class_added in selected_class_list:
             json_object[class_added]["subject_teacher_list"][subject] = details
 
@@ -360,7 +416,6 @@ def subject_teacher_assignment(root, button1, button2, button3):
         checkbutton_2.deselect()
         checkbutton_3.deselect()
         checkbutton_4.deselect()
-        checkbutton_5.deselect()
 
         subject_name_entry.delete(0, END)
         count_entry.delete(0, END)
@@ -393,7 +448,6 @@ def subject_teacher_assignment(root, button1, button2, button3):
         checkbutton_2.deselect()
         checkbutton_3.deselect()
         checkbutton_4.deselect()
-        checkbutton_5.deselect()
 
         subject_name_entry.delete(0, END)
         count_entry.delete(0, END)
@@ -459,11 +513,6 @@ def subject_teacher_assignment(root, button1, button2, button3):
         if selected_list[6] == 1:
             checkbutton_3.select()
             add_teacher_button.config(state=NORMAL)
-        elif selected_list[6] == 2:
-            checkbutton_5.select()
-            add_teacher_button.config(state=NORMAL)
-        else:
-            if len(selected_list[2]): add_teacher_button.config(state=DISABLED)
 
     def clear_details():
         selected_subject = subject_registered.focus()
@@ -471,15 +520,28 @@ def subject_teacher_assignment(root, button1, button2, button3):
             messagebox.showwarning("WARNING", "SELECT SUBJECT TO CLEAR")
             return
 
-        subject_registered.delete(selected_subject)
         class_name = class_dropdown.get()
 
         with open('./Academic_years/'+academic_year+".json", 'r') as file:
             json_object = json.load(file)
         
+        if json_object[class_name]["subject_teacher_list"][selected_subject][-1]:
+            messagebox.showwarning("WARNING", "Slots have been assigned for this subject")
+            return
+        
+        subject_registered.delete(selected_subject)
         classes = json_object[class_name]["subject_teacher_list"][selected_subject][4]
+        teachers = json_object[class_name]["subject_teacher_list"][selected_subject][2]
+        labs = json_object[class_name]["subject_teacher_list"][selected_subject][3]
+
         for class_added in classes:
             json_object[class_added]["subject_teacher_list"].pop(selected_subject)
+        
+        for teacher in teachers:
+            json_object[teacher]["class_list"].get(selected_subject).remove(classes)
+
+        for lab in labs:
+            json_object[lab]["class_list"].get(selected_subject).remove(classes)
 
         with open('./Academic_years/'+academic_year+".json", 'w') as file:
             file.write(json.dumps(json_object, indent=4))
@@ -566,10 +628,6 @@ def subject_teacher_assignment(root, button1, button2, button3):
     checkbutton_3_var = IntVar()
     checkbutton_3 = Checkbutton(root, text="COMBINED TEACHERS", variable=checkbutton_3_var, onvalue=1, offvalue=0, command=combined_teacher_check)
     checkbutton_3.grid(row=7, column=0)
-
-    checkbutton_5_var = IntVar()
-    checkbutton_5 = Checkbutton(root, text="MULTIPLE AND SEPERATE TEACHERS", onvalue=1, offvalue=0, variable=checkbutton_5_var, command=seperate_teachers_check)
-    checkbutton_5.grid(row=8, column=0)
 
     teachers_frame = Frame(root)
     teachers_frame.grid(row=6, column=1, columnspan=2, rowspan=3)
