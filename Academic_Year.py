@@ -3,7 +3,7 @@ import json
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
-from Class_confirmation import class_confirmation
+from Import_option import import_option
 from Main_window import main_window
 
 academic_year_temp = os.popen('ls ./Academic_years')
@@ -65,7 +65,7 @@ def Academic_year_window(root) :
                 choose_button.destroy()
                 create_button.destroy()
 
-                class_confirmation(root)
+                import_option(root)
 
         choose_button.grid_forget()
         create_button.grid_forget()
