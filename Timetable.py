@@ -3,16 +3,17 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 
-def timetable(root, button1, button2, button3):
+def timetable(root, button1, button2, button3, button4):
 
     def back():
         for widget in root.winfo_children():
-            if widget not in [button1, button2, button3]:
+            if widget not in [button1, button2, button3, button4]:
                 widget.destroy()
 
         button1.grid(row=0, column=0)
         button2.grid(row=1, column=0)
         button3.grid(row=2, column=0)
+        button4.grid(row=3, column=0)
 
     def div_selected(self):
         div_select = div_dropdown.get()
