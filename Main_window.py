@@ -46,7 +46,7 @@ def main_window(root):
     subject_registration_button = Button(root, text="SUBJECT REGISTRATION", command=subject_registration)
     subject_registration_button.grid(row=1, column=0)
 
-    timetable_button = Button(root, text="TIMETABLE", command=timetable_button_function)
+    timetable_button = Button(root, text="ASSIGN TIMETABLE", command=timetable_button_function)
     timetable_button.grid(row=2, column=0)
 
     view_timetable_button = Button(root, text="VIEW TIMETABLE", command=view_timetable_function)

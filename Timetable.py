@@ -114,7 +114,7 @@ def timetable(root, button1, button2, button3, button4):
 
                 for lab in subject_chosen_details[3]:
                     if json_object[lab]["timetable"][i][j+k]:
-                        messagebox.showwarning("WARNING", lab+" has "+json_object[lab]["timetable"][i][j]+" during the selected slot")
+                        messagebox.showwarning("WARNING", lab+" has "+str(json_object[lab]["timetable"][i][j])+" during the selected slot")
                         condition = False
             
             if int(subject_chosen_details[-3])+int(subject_chosen_details[-1]) > int(subject_chosen_details[1]):

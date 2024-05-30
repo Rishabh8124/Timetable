@@ -182,9 +182,11 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
             add_labs_button.config(state=NORMAL)
         else:
             if len(selected_lab_list):
-                pass
-            else:
-                add_labs_button.config(state=DISABLED)
+                for i in selected_lab_list:
+                    labs_list_tree.delete(i)
+                selected_lab_list.clear()
+            
+            add_labs_button.config(state=DISABLED)
 
     def combined_teacher_check():
         pass
@@ -314,12 +316,14 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
                     return
 
                 if old_details[3] != selected_lab_list:
-                    messagebox.showwarning("WARNING", "Timetable slots have been assigned for this subject. Lab list cannot be modified")
-                    return
+                    if sorted(old_details[3]) != sorted(selected_lab_list):
+                        messagebox.showwarning("WARNING", "Timetable slots have been assigned for this subject. Lab list cannot be modified")
+                        return
                 
                 if old_details[4] != selected_class_list:
-                    messagebox.showwarning("WARNING", "Timetable slots have been assigned for this subject. Class list cannot be modified")
-                    return
+                    if sorted(old_details[4]) != sorted(selected_class_list):
+                        messagebox.showwarning("WARNING", "Timetable slots have been assigned for this subject. Class list cannot be modified")
+                        return
 
                 teacher_condition = checkbutton_3_var.get()
 
@@ -327,7 +331,7 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
                     messagebox.showwarning("WARNING", "Timetable slots have been assigned for this subject. Teacher assignment type cannot be changed")
                     return
                 
-                elif old_details[2] != selected_teacher_list:
+                elif sorted(old_details[2]) != sorted(selected_teacher_list):
                     if old_details[-2] == 0:
                         if old_details[2]:
                             if selected_teacher_list == []:
@@ -387,7 +391,7 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
                 json_object[teachers]['class_list'].get(subject, 0).remove(old_details[4])
 
             for labs in old_details[3]:
-                json_object[labs]['class_list'].get(subject).remove(old_details[4])
+                json_object[labs]['class_list'][subject].remove(old_details[4])
         
             subject_registered.delete(subject)
 
@@ -403,9 +407,9 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
             json_object[teachers]["class_list"][subject] = subject_list
         
         for labs in selected_lab_list:
-            subject_list = json_object[lab]['class_list'].get(subject, [])
+            subject_list = json_object[labs]['class_list'].get(subject, [])
             subject_list.append(selected_class_list)
-            json_object[labs]["class_list"][subject] = json_object[labs]['class_list'].get(subject, []).append(selected_class_list)
+            json_object[labs]["class_list"][subject] = subject_list
         
         for class_added in selected_class_list:
             json_object[class_added]["subject_teacher_list"][subject] = details
@@ -488,6 +492,7 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
 
         if selected_list[3]:
             checkbutton_1.select()
+            add_labs_button.config(state=NORMAL)
             for lab in selected_list[3]:
                 selected_lab_list.append(lab)
                 labs_list_tree.insert(parent='', text='', index=END, iid=lab, value=[lab])
