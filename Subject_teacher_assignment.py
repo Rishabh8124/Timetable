@@ -3,46 +3,47 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 
-def subject_teacher_assignment(root, button1, button2, button3, button4):
+def subject_teacher_assignment(root, button1, button2, button3, button4, button5):
 
     def back():
         for widget in root.winfo_children():
-            if widget not in [button1, button2, button3, button4]:
+            if widget not in [button1, button2, button3, button4, button5]:
                 widget.destroy()
 
         button1.grid(row=0, column=0)
-        button2.grid(row=1, column=0)
-        button3.grid(row=2, column=0)
-        button4.grid(row=3, column=0)
+        button2.grid(row=2, column=0)
+        button3.grid(row=3, column=0)
+        button4.grid(row=4, column=0)
+        button5.grid(row=1, column=0)
 
     def back_window(frame):
         frame.destroy()
 
-        add_teacher_button.grid(row=9, column=1)
-        delete_teacher_button.grid(row=9, column=2)
+        add_teacher_button.grid(row=10, column=3)
+        delete_teacher_button.grid(row=10, column=4)
 
     def back_window_1(frame):
         frame.destroy()
 
-        add_labs_button.grid(row=11, column=1)
-        delete_labs_button.grid(row=11, column=2)
+        add_labs_button.grid(row=12, column=3, pady=5)
+        delete_labs_button.grid(row=12, column=4)
 
     def back_window_2(frame):
         frame.destroy()
 
-        add_class_button.grid(row=13, column=1)
-        delete_class_button.grid(row=13, column=2)
+        add_class_button.grid(row=14, column=3, pady=5)
+        delete_class_button.grid(row=14, column=4)
 
     def add_teacher_window(dropdown, frame):
         teacher_selected = dropdown.get()
         if (teacher_selected):
             selected_teacher_list.append(teacher_selected)
-            teachers_list_tree.insert(parent='', index=END, iid=teacher_selected.split('-')[0], text='', value=teacher_selected)
+            teachers_list_tree.insert(parent='', index=END, iid=teacher_selected.split('-')[0], text='', value=[teacher_selected])
 
             frame.destroy()
 
-            add_teacher_button.grid(row=9, column=1)
-            delete_teacher_button.grid(row=9, column=2)
+            add_teacher_button.grid(row=10, column=3, pady=5)
+            delete_teacher_button.grid(row=10, column=4)
 
         elif teacher_selected:
             messagebox.showwarning("WARNING", "TEACHER HAS BEEN ASSIGNED")
@@ -60,16 +61,16 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
                 teacher_list.remove(j)
 
         add_teacher_frame = Frame(root)
-        add_teacher_frame.grid(row=9, column=0, columnspan=3)
+        add_teacher_frame.grid(row=10, column=0, columnspan=6)
 
         teacher_list_dropdown = ttk.Combobox(add_teacher_frame, value=teacher_list)
-        teacher_list_dropdown.grid(row=0, column=0)
+        teacher_list_dropdown.grid(row=0, column=0, columnspan=2)
 
         add_button = Button(add_teacher_frame, text="ADD TEACHER", command=lambda: add_teacher_window(teacher_list_dropdown, add_teacher_frame))
-        add_button.grid(row=0, column=1)
+        add_button.grid(row=0, column=2, columnspan=2)
 
         back_button = Button(add_teacher_frame, text="BACK", command=lambda: back_window(add_teacher_frame))
-        back_button.grid(row=0, column=2)
+        back_button.grid(row=0, column=4, columnspan=2)
 
     def delete_teacher():
         teacher_selected = teachers_list_tree.focus()
@@ -90,8 +91,8 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
 
             frame.destroy()
 
-            add_labs_button.grid(row=11, column=1)
-            delete_labs_button.grid(row=11, column=2)
+            add_labs_button.grid(row=12, column=3)
+            delete_labs_button.grid(row=12, column=4)
 
         elif lab_selected:
             messagebox.showwarning("WARNING", "TEACHER HAS BEEN ASSIGNED")
@@ -109,7 +110,7 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
                 lab_list.remove(j)
 
         add_lab_frame = Frame(root)
-        add_lab_frame.grid(row=11, column=0, columnspan=3)
+        add_lab_frame.grid(row=12, column=0, columnspan=6)
 
         lab_list_dropdown = ttk.Combobox(add_lab_frame, value=lab_list)
         lab_list_dropdown.grid(row=0, column=0)
@@ -135,8 +136,8 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
             classes_list_tree.insert(parent='', index=END, iid=class_selected, text='', value=class_selected)
             frame.destroy()
 
-            add_class_button.grid(row=13, column=1)
-            delete_class_button.grid(row=13, column=2)
+            add_class_button.grid(row=14, column=3, pady=5)
+            delete_class_button.grid(row=14, column=4)
             delete_class_button.config(state=NORMAL)
 
         else:
@@ -151,7 +152,7 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
             new_class_list.remove(j)
 
         add_class_frame = Frame(root)
-        add_class_frame.grid(row=13, column=0, columnspan=3)
+        add_class_frame.grid(row=14, column=0, columnspan=6)
 
         class_list_dropdown = ttk.Combobox(add_class_frame, value=new_class_list)
         class_list_dropdown.grid(row=0, column=0)
@@ -223,8 +224,16 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
     def div_selected(self):
         div_select = div_dropdown.get()
         class_dropdown.config(values=class_list[class_division[div_select]])
+        
+        if div_select == "Primary": daycheck[5].config(state=DISABLED)
+        else: daycheck[5].config(state=NORMAL)
 
     def class_selected(self):
+        div_select = div_dropdown.get()
+        
+        if div_select == "Primary": daycheck[5].config(state=DISABLED)
+        else: daycheck[5].config(state=NORMAL)
+        
         class_name = class_dropdown.get()
         selected_class_list.clear()
         selected_class_list.append(class_name)
@@ -239,7 +248,8 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
         file.close()
 
         subject_list_1 = json_object[class_name]["subject_teacher_list"]
-
+        teacher_label.config(text=("Class teacher: "+json_object[class_name]["teacher"]).upper())
+        
         for subject in subject_registered.get_children():
             subject_registered.delete(subject)
 
@@ -250,6 +260,12 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
         checkbutton_2.deselect()
         checkbutton_3.deselect()
         checkbutton_4.deselect()
+        checkbutton_5.deselect()
+        
+        for day_count in range(6):
+            daycheck[day_count].select()
+        
+        if div_dropdown.get() == "Primary": daycheck[5].deselect()
 
         add_labs_button.config(state=DISABLED)
         for lab in selected_lab_list:
@@ -281,8 +297,7 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
         subject = subject_name_entry.get()
         count = count_entry.get()
         consecutive_periods = 1
-        if (checkbutton_4_var.get()):
-            consecutive_periods = consecutive_periods_entry.get()
+        same_day = checkbutton_5_var.get()        
         
         if subject == '':
             messagebox.showwarning("WARNING", "SUBJECT NAME IS EMPTY")
@@ -293,9 +308,11 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
         if checkbutton_1_var.get() and selected_lab_list == []:
             messagebox.showwarning("WARNING", "LAB NAME IS EMPTY")
             return
-        if checkbutton_4_var.get() and consecutive_periods.isnumeric() == False:
+        if checkbutton_4_var.get() and consecutive_periods_entry.get().isnumeric() == False:
             messagebox.showwarning("WARNING", "CONSECUTIVE PERIODS SHOULD BE AN INTEGER")
             return
+        if (checkbutton_4_var.get() and consecutive_periods_entry.get().isnumeric()):
+            consecutive_periods = int(consecutive_periods_entry.get())
         
         for class_added in selected_class_list:
             if json_object[class_added]["subject_teacher_list"].get(subject, False):
@@ -303,8 +320,12 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
                 if not confirm:
                     return
         
+        days = []
+        for day_count in range(6):
+            days.append(daycheck_variable[day_count].get())
+        
         class_name = class_dropdown.get()
-        details = [subject, count, selected_teacher_list, selected_lab_list, selected_class_list, consecutive_periods, checkbutton_3_var.get(), 0]
+        details = [subject, count, selected_teacher_list, selected_lab_list, selected_class_list, same_day, days, consecutive_periods, checkbutton_3_var.get(), 0]
 
         if subject in subject_registered.get_children():
             old_details = json_object[class_name]["subject_teacher_list"][subject]
@@ -315,15 +336,30 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
                     messagebox.showwarning("WARNING", "Timetable slots have been assigned for this subject. New limit exceeds the current alloted slots")
                     return
 
-                if old_details[3] != selected_lab_list:
-                    if sorted(old_details[3]) != sorted(selected_lab_list):
-                        messagebox.showwarning("WARNING", "Timetable slots have been assigned for this subject. Lab list cannot be modified")
-                        return
+                if sorted(old_details[3]) != sorted(selected_lab_list):
+                    messagebox.showwarning("WARNING", "Timetable slots have been assigned for this subject. Lab list cannot be modified")
+                    return
                 
-                if old_details[4] != selected_class_list:
-                    if sorted(old_details[4]) != sorted(selected_class_list):
-                        messagebox.showwarning("WARNING", "Timetable slots have been assigned for this subject. Class list cannot be modified")
-                        return
+                if sorted(old_details[4]) != sorted(selected_class_list):
+                    messagebox.showwarning("WARNING", "Timetable slots have been assigned for this subject. Class list cannot be modified")
+                    return
+                
+                if old_details[5] == 0 and same_day == 1:
+                    current_timetable = json_object[class_name]["timetable"]
+                    for i in current_timetable:
+                        c = 0
+                        for j in i:
+                            if j and j.split('::')[0] == subject: c += 1
+                        if c>1:
+                            messagebox.showwarning("WARNING", "Multiple classes have been assigned on the same day. Cannot change criteria")
+                            return
+                
+                for day_count in range(6):
+                    if old_details[6][day_count] == 1 and days[day_count] == 0:
+                        for i in json_object[class_name]["timetable"][day_count]:
+                            if i and i.split("::")[0] == subject:
+                                messagebox.showwarning("WARNING", "Timetable slots have been assigned for this subject on this day. Day list cannot be modified")
+                                return
 
                 teacher_condition = checkbutton_3_var.get()
 
@@ -421,6 +457,12 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
         checkbutton_2.deselect()
         checkbutton_3.deselect()
         checkbutton_4.deselect()
+        checkbutton_5.deselect()
+        
+        for day_count in range(6):
+            daycheck[day_count].select()
+        
+        if (div_dropdown.get() == "Primary"): daycheck[5].deselect()
 
         subject_name_entry.delete(0, END)
         count_entry.delete(0, END)
@@ -453,6 +495,7 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
         checkbutton_2.deselect()
         checkbutton_3.deselect()
         checkbutton_4.deselect()
+        checkbutton_5.deselect()
 
         subject_name_entry.delete(0, END)
         count_entry.delete(0, END)
@@ -484,7 +527,7 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
 
         for teacher in selected_list[2]:
             selected_teacher_list.append(teacher)
-            teachers_list_tree.insert(parent='', index=END, iid=teacher.split('-')[0], text='', value=teacher)
+            teachers_list_tree.insert(parent='', index=END, iid=teacher.split('-')[0], text='', value=[teacher])
 
         for lab in selected_lab_list:
             labs_list_tree.delete(lab)
@@ -511,12 +554,19 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
             delete_class_button.config(state=DISABLED)
             add_class_button.config(state=DISABLED)
         
-        if selected_list[5] != 1:
+        if selected_list[5]:
+            checkbutton_5.select()
+        
+        for day_count in range(6):
+            if selected_list[6][day_count]: daycheck[day_count].select()
+            else: daycheck[day_count].deselect()
+        
+        if selected_list[7] != 1:
             checkbutton_4.select()
             consecutive_periods_entry.config(state=NORMAL)
             consecutive_periods_entry.insert(0, selected_list[5])
         
-        if selected_list[6] == 1:
+        if selected_list[8] == 1:
             checkbutton_3.select()
             add_teacher_button.config(state=NORMAL)
 
@@ -572,21 +622,30 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
    
     class_division = {"Primary": 0, "Secondary": 1, "Higher Secondary": 2}
 
+    division_label = Label(root, text="Division")
+    division_label.grid(row=0, column=0, columnspan=2)
+
     div_dropdown = ttk.Combobox(root, value=list(class_division.keys()))
-    div_dropdown.grid(row=0, column=0, columnspan=3, sticky=W+E)
+    div_dropdown.grid(row=0, column=2, columnspan=4, sticky=W+E)
     div_dropdown.bind("<<ComboboxSelected>>", div_selected)
 
+    class_label = Label(root, text="Class")
+    class_label.grid(row=1, column=0, columnspan=2)
+    
     class_dropdown = ttk.Combobox(root, value=class_list[0])
-    class_dropdown.grid(row=1, column=0, columnspan=3, sticky=W+E)
+    class_dropdown.grid(row=1, column=2, columnspan=4, sticky=W+E)
     class_dropdown.bind("<<ComboboxSelected>>", class_selected)
+    
+    teacher_label = Label(root, text="Class teacher: ".upper())
+    teacher_label.grid(row=2, column=0, columnspan=6)
 
     subject_frame = Frame(root)
-    subject_frame.grid(row=2, column=0, columnspan=3)
+    subject_frame.grid(row=3, column=0, columnspan=6)
 
     scroll = Scrollbar(subject_frame, orient=VERTICAL)
     scroll.pack(side=RIGHT, fill='y')
 
-    subject_registered = ttk.Treeview(subject_frame, height=9, yscrollcommand=scroll.set)
+    subject_registered = ttk.Treeview(subject_frame, height=4, yscrollcommand=scroll.set)
     subject_registered.pack()
 
     scroll.config(command=subject_registered.yview)
@@ -611,37 +670,37 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
     subject_registered.heading("COUNT", text="COUNT", anchor=CENTER)
 
     edit_button = Button(root, text="EDIT DETAILS", command=edit_details)
-    edit_button.grid(row=3, column=0, columnspan=2)
+    edit_button.grid(row=4, column=0, columnspan=4)
 
     clear_button = Button(root, text="CLEAR DETAILS", command=clear_details)
-    clear_button.grid(row=3, column=2)
+    clear_button.grid(row=4, column=4, columnspan=2)
 
     subject_name_label =  Label(root, text="SUBJECT NAME: ")
-    subject_name_label.grid(row=4, column=0)
+    subject_name_label.grid(row=5, column=0, columnspan=2)
 
     subject_name_entry = Entry(root)
-    subject_name_entry.grid(row=4, column=1, columnspan=2)
+    subject_name_entry.grid(row=5, column=2, columnspan=4)
 
     count_label =  Label(root, text="COUNT: ")
-    count_label.grid(row=5, column=0)
+    count_label.grid(row=6, column=0, columnspan=2)
 
     count_entry = Entry(root)
-    count_entry.grid(row=5, column=1, columnspan=2)
+    count_entry.grid(row=6, column=2, columnspan=4)
 
     teachers_label = Label(root, text="TEACHERS HANDLING: ")
-    teachers_label.grid(row=6, column=0)
+    teachers_label.grid(row=7, column=0, columnspan=2)
 
     checkbutton_3_var = IntVar()
     checkbutton_3 = Checkbutton(root, text="COMBINED TEACHERS", variable=checkbutton_3_var, onvalue=1, offvalue=0, command=combined_teacher_check)
-    checkbutton_3.grid(row=7, column=0)
+    checkbutton_3.grid(row=8, column=0, columnspan=2)
 
     teachers_frame = Frame(root)
-    teachers_frame.grid(row=6, column=1, columnspan=2, rowspan=3)
+    teachers_frame.grid(row=7, column=2, columnspan=4, rowspan=3)
 
     teachers_scroll = Scrollbar(teachers_frame, orient=VERTICAL)
     teachers_scroll.pack(side=RIGHT, fill='y')
 
-    teachers_list_tree = ttk.Treeview(teachers_frame, height=5, yscrollcommand=teachers_scroll.set)
+    teachers_list_tree = ttk.Treeview(teachers_frame, height=2, yscrollcommand=teachers_scroll.set)
     teachers_list_tree.pack()
 
     teachers_scroll.config(command=teachers_list_tree.yview)
@@ -654,22 +713,22 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
     teachers_list_tree.heading("TEACHERS", text="TEACHERS", anchor=CENTER)
 
     add_teacher_button = Button(root, text="ADD TEACHER", command=add_teacher)
-    add_teacher_button.grid(row=9, column=1)
+    add_teacher_button.grid(row=10, column=3, pady=5)
 
     delete_teacher_button = Button(root, text="DELETE TEACHER", command=delete_teacher)
-    delete_teacher_button.grid(row=9, column=2)
+    delete_teacher_button.grid(row=10, column=4)
 
     checkbutton_1_var = IntVar()
     checkbutton_1 = Checkbutton(root, text="LAB", variable=checkbutton_1_var, onvalue=1, offvalue=0, command=lab_entry)
-    checkbutton_1.grid(row=10, column=0, rowspan=2)
+    checkbutton_1.grid(row=11, column=0, columnspan=2, rowspan=2)
 
     labs_frame = Frame(root)
-    labs_frame.grid(row=10, column=1, columnspan=2)
+    labs_frame.grid(row=11, column=2, columnspan=4)
 
     labs_scroll = Scrollbar(labs_frame, orient=VERTICAL)
     labs_scroll.pack(side=RIGHT, fill='y')
 
-    labs_list_tree = ttk.Treeview(labs_frame, height=5, yscrollcommand=labs_scroll.set)
+    labs_list_tree = ttk.Treeview(labs_frame, height=2, yscrollcommand=labs_scroll.set)
     labs_list_tree.pack()
 
     labs_scroll.config(command=labs_list_tree.yview)
@@ -682,22 +741,22 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
     labs_list_tree.heading("LABS", text="LABS", anchor=CENTER)
 
     add_labs_button = Button(root, text="ADD LAB", command=add_lab, state=DISABLED)
-    add_labs_button.grid(row=11, column=1)
+    add_labs_button.grid(row=12, column=3, pady=5)
 
     delete_labs_button = Button(root, text="DELETE LAB", command=delete_lab)
-    delete_labs_button.grid(row=11, column=2)
+    delete_labs_button.grid(row=12, column=4)
 
     checkbutton_2_var = IntVar()
     checkbutton_2 = Checkbutton(root, text="COMBINED CLASS", onvalue=1, offvalue=0, variable=checkbutton_2_var, command=combined_class_check)
-    checkbutton_2.grid(row=12, column=0)
+    checkbutton_2.grid(row=13, column=0, columnspan=2)
 
     classes_frame = Frame(root)
-    classes_frame.grid(row=12, column=1, columnspan=2)
+    classes_frame.grid(row=13, column=2, columnspan=4)
 
     classes_scroll = Scrollbar(classes_frame, orient=VERTICAL)
     classes_scroll.pack(side=RIGHT, fill='y')
 
-    classes_list_tree = ttk.Treeview(classes_frame, height=5, yscrollcommand=classes_scroll.set)
+    classes_list_tree = ttk.Treeview(classes_frame, height=2, yscrollcommand=classes_scroll.set)
     classes_list_tree.pack()
 
     classes_scroll.config(command=classes_list_tree.yview)
@@ -710,20 +769,40 @@ def subject_teacher_assignment(root, button1, button2, button3, button4):
     classes_list_tree.heading("CLASSES", text="CLASSES", anchor=CENTER)
 
     add_class_button = Button(root, text="ADD CLASS", command=add_class, state=DISABLED)
-    add_class_button.grid(row=13, column=1)
+    add_class_button.grid(row=14, column=3, pady=5)
 
     delete_class_button = Button(root, text="DELETE CLASS", command=delete_class, state=DISABLED)
-    delete_class_button.grid(row=13, column=2)
+    delete_class_button.grid(row=14, column=4)
 
     checkbutton_4_var = IntVar()
     checkbutton_4 = Checkbutton(root, text="CONSECUTIVE PERIODS", onvalue=1, offvalue=0, variable=checkbutton_4_var, command=consecutive_periods_check)
-    checkbutton_4.grid(row=14, column=0)
+    checkbutton_4.grid(row=15, column=0, columnspan=2)
 
     consecutive_periods_entry = Entry(root, state=DISABLED)
-    consecutive_periods_entry.grid(row=14, column=1, columnspan=2)
+    consecutive_periods_entry.grid(row=15, column=2, columnspan=4)
+
+    checkbutton_5_var = IntVar()
+    checkbutton_5 = Checkbutton(root, text="ONE PERIOD PER DAY", onvalue=1, offvalue=0, variable=checkbutton_5_var)
+    checkbutton_5.grid(row=16, column=0, columnspan=6)
+    
+    daycheck_variable = []
+    daycheck = []
+    days_dict = {
+        0: "Monday",
+        1: "Tuesday",
+        2: "Wednesday",
+        3: "Thursday",
+        4: "Friday",
+        5: "Saturday"
+    }
+    
+    for day_count in range(6):
+        daycheck_variable.append(IntVar())
+        daycheck.append(Checkbutton(root, text=days_dict[day_count], onvalue=1, offvalue=0, variable=daycheck_variable[day_count]))
+        daycheck[day_count].grid(row=17, column=day_count)
 
     save_button = Button(root, text="SAVE DETAILS", command=save_details, state=DISABLED)
-    save_button.grid(row=15, column=0, columnspan=3)
+    save_button.grid(row=19, column=0, columnspan=6)
 
     back_button = Button(root, text="BACK", command=back)
-    back_button.grid(row=16, column=0, columnspan=3)
+    back_button.grid(row=20, column=0, columnspan=6)

@@ -2,7 +2,7 @@ import json
 from tkinter import *
 from tkinter import ttk
 
-def view_timetable(root, button1, button2, button3, button4):
+def view_timetable(root, button1, button2, button3, button4, button5):
     with open("temp.json") as file:
         json_object = json.load(file)
         academic_year = json_object["academic_year"]
@@ -21,13 +21,14 @@ def view_timetable(root, button1, button2, button3, button4):
     ]
     def back():
         for widget in root.winfo_children():
-            if widget not in [button1, button2, button3, button4]:
+            if widget not in [button1, button2, button3, button4, button5]:
                 widget.destroy()
 
         button1.grid(row=0, column=0)
-        button2.grid(row=1, column=0)
-        button3.grid(row=2, column=0)
-        button4.grid(row=3, column=0)
+        button2.grid(row=2, column=0)
+        button3.grid(row=3, column=0)
+        button4.grid(row=4, column=0)
+        button5.grid(row=1, column=0)
 
     def drop1_selected(self):
         select = dropdown1.get()

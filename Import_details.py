@@ -6,10 +6,10 @@ from tkinter import messagebox
 from Main_window import main_window
 
 def import_details(root):
-    academic_year_temp = os.popen('ls ./Academic_years')
+    academic_year_temp = os.listdir("./Academic_years")
     academic_year_list = []
     for folder in academic_year_temp:
-        academic_year_list.append(folder[:-6].lower())
+        academic_year_list.append(folder[:-5].lower())
 
     with open("temp.json") as file:
         json_object = json.load(file)

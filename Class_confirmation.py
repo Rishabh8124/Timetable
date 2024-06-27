@@ -24,12 +24,14 @@ def class_confirmation(root):
             for cl in item:
                 academic_year_dictionary[cl] = {
                     "subject_teacher_list": {},
-                    "timetable": timetable
+                    "timetable": timetable,
+                    "teacher": ""
                 }
 
         academic_year_dictionary["class_list"] = final_class_list
         academic_year_dictionary["teacher_list"] = []
         academic_year_dictionary["lab_list"] = []
+        academic_year_dictionary["class_teachers"] = []
 
         file = open("./Academic_years/"+academic_year+".json", 'w')
         file.write(json.dumps(academic_year_dictionary, indent=4))

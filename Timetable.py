@@ -3,23 +3,35 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 
-def timetable(root, button1, button2, button3, button4):
+def timetable(root, button1, button2, button3, button4, button5):
 
     def back():
         for widget in root.winfo_children():
-            if widget not in [button1, button2, button3, button4]:
+            if widget not in [button1, button2, button3, button4, button5]:
                 widget.destroy()
 
         button1.grid(row=0, column=0)
-        button2.grid(row=1, column=0)
-        button3.grid(row=2, column=0)
-        button4.grid(row=3, column=0)
+        button2.grid(row=2, column=0)
+        button3.grid(row=3, column=0)
+        button4.grid(row=4, column=0)
+        button5.grid(row=1, column=0)
 
     def div_selected(self):
         div_select = div_dropdown.get()
         class_dropdown.config(values=class_list[class_division[div_select]])
 
     def class_selected(self):
+        div_select = div_dropdown.get()
+        
+        if div_select == "Primary": 
+            for i in dropdowns_list[-1][1:]:
+                i.set("")
+                i.config(state=DISABLED)
+        else: 
+            for i in dropdowns_list[-1][1:]:
+                i.set("")
+                i.config(state=NORMAL)
+        
         class_name = class_dropdown.get()
 
         file = open('./Academic_years/'+academic_year+".json", 'r')
@@ -29,6 +41,7 @@ def timetable(root, button1, button2, button3, button4):
         class_details = json_object[class_name]
         subject_details = class_details["subject_teacher_list"]
         class_timetable = class_details["timetable"]
+        teacher_label.config(text=("Class teacher: "+class_details["teacher"]).upper())
 
         final_subject_list = ['']
         for children in subject_registered.get_children():
@@ -44,8 +57,9 @@ def timetable(root, button1, button2, button3, button4):
         
         for i in range(len(dropdowns_list)):
             for j in range(len(dropdowns_list[i])):
-                dropdowns_list[i][j].config(value=final_subject_list)
-                dropdowns_list[i][j].current(final_subject_list.index(class_timetable[i][j]))
+                if (i and j):
+                    dropdowns_list[i][j].config(value=final_subject_list)
+                    dropdowns_list[i][j].current(final_subject_list.index(class_timetable[i-1][j-1]))
     
     def slot_selected(self, i, j):
         class_name = class_dropdown.get()
@@ -58,8 +72,10 @@ def timetable(root, button1, button2, button3, button4):
         subject_details = class_details["subject_teacher_list"]
         class_timetable = class_details["timetable"]
 
-        subject_chosen = dropdowns_list[i][j].get()
+        subject_chosen = dropdowns_list[i+1][j+1].get()
         old_subject_chosen = class_timetable[i][j]
+        
+        j1 = j
 
         if old_subject_chosen:
             teacher_selected = ''
@@ -71,20 +87,27 @@ def timetable(root, button1, button2, button3, button4):
 
             for classes in subject_chosen_details[4]:
                 json_object[classes]["subject_teacher_list"][old_subject][-1] -= subject_chosen_details[-3]
-
-            for k in range(subject_chosen_details[-3]):
+                
+            old_c = int(subject_chosen_details[-3])
+            
+            if old_c > 1:
+                while (j1>=0 and json_object[class_name]["timetable"][i][j1] and json_object[class_name]["timetable"][i][j1].split('::')[0] == old_subject): j1 -= 1
+                j1+=1
+                while (j1+old_c <= j): j1 += old_c
+                
+            for k in range(old_c):
                 if teacher_selected == '':
                     for teacher in subject_chosen_details[2]:
-                        json_object[teacher]["timetable"][i][j+k] = ''
+                        json_object[teacher]["timetable"][i][j1+k] = ''
                 else:
-                    json_object[teacher_selected]["timetable"][i][j+k] = ''
+                    json_object[teacher_selected]["timetable"][i][j1+k] = ''
 
-                dropdowns_list[i][j+k].current(0)
+                dropdowns_list[i+1][j1+k+1].current(0)
                 for classes in subject_chosen_details[4]:
-                    json_object[classes]["timetable"][i][j+k] = ''
+                    json_object[classes]["timetable"][i][j1+k] = ''
 
                 for lab in subject_chosen_details[3]:
-                    json_object[lab]["timetable"][i][j+k] = ''
+                    json_object[lab]["timetable"][i][j1+k] = ''
 
         condition = True
         
@@ -96,7 +119,26 @@ def timetable(root, button1, button2, button3, button4):
 
             subject_chosen_details = subject_details[subject]
             
-            for k in range(subject_chosen_details[-3]):
+            if subject_chosen_details[6][i] == 0:
+                messagebox.showwarning("WARNING", "Selected subject cannot be handled on the specified day")
+                condition = False
+            
+            if subject_chosen_details[5] == 1:
+                c = 0
+                for y in json_object[subject_chosen_details[4][0]]["timetable"][i]:
+                    if y and y.split("::")[0] == subject: c += 1
+                if c:
+                    messagebox.showwarning("WARNING", "Selected subject cannot have 2 classes on the same day")
+                    condition = False
+            
+            if int(subject_chosen_details[-3])+j > len(json_object[subject_chosen_details[4][0]]["timetable"][i]):
+                messagebox.showwarning("WARNING", "Number of periods available is less than alloted count")
+                condition = False
+                
+            for k in range(int(subject_chosen_details[-3])):
+                if condition == False:
+                    break
+                
                 if teacher_selected == '':
                     for teacher in subject_chosen_details[2]:
                         if json_object[teacher]["timetable"][i][j+k]:
@@ -121,10 +163,6 @@ def timetable(root, button1, button2, button3, button4):
                 messagebox.showwarning("WARNING", "The number of classes per week has exceeded the limit")
                 condition = False
             
-            if j<2 and int(subject_chosen_details[-2])+j > 2 or 5>j>=2 and int(subject_chosen_details[-2])+j > 5 or j>=5 and int(subject_chosen_details[-2])+j > 8:
-                messagebox.showwarning("WARNING", "Consecutive periods cannot have break in between")
-                condition = False
-            
             if condition:
                 pass
             elif old_subject_chosen:
@@ -134,23 +172,24 @@ def timetable(root, button1, button2, button3, button4):
                 teacher_selected = ''
                 if '::' in subject_chosen:
                     teacher_selected = old_subject_chosen.split("::")[1]
+                j = j1
             else:
-                dropdowns_list[i][j].current(0)
+                dropdowns_list[i+1][j+1].current(0)
                 return
 
             for classes in subject_chosen_details[4]:
                 json_object[classes]["subject_teacher_list"][subject][-1] += int(subject_chosen_details[-3])
             
-            for k in range(subject_chosen_details[-3]):
+            for k in range(int(subject_chosen_details[-3])):
                 if teacher_selected == '':
                     for teacher in subject_chosen_details[2]:
                         json_object[teacher]["timetable"][i][j+k] = subject_chosen_details[4]
                 else:
                     json_object[teacher_selected]["timetable"][i][j+k] = subject_chosen_details[4]
                 
-                dropdowns_list[i][j+k].current(dropdowns_list[i][j+k]['values'].index(subject_chosen))
+                dropdowns_list[i+1][j+1+k].current(dropdowns_list[i+1][j+1+k]['values'].index(subject_chosen))
                 for classes in subject_chosen_details[4]:
-                    dropdowns_list[i][j+k].current(dropdowns_list[i][j+k]['values'].index(subject_chosen))
+                    dropdowns_list[i+1][j+k+1].current(dropdowns_list[i+1][j+1+k]['values'].index(subject_chosen))
                     json_object[classes]["timetable"][i][j+k] = subject_chosen
 
                 for lab in subject_chosen_details[3]:
@@ -165,7 +204,6 @@ def timetable(root, button1, button2, button3, button4):
         for i in json_object[class_name]["subject_teacher_list"].values():
             subject_registered.insert(parent='', text='', index=END, iid=i[0], value=[i[0], str(i[-1])+'/'+str(i[1])])
                 
-    
     with open("temp.json") as file:
         json_object = json.load(file)
         academic_year = json_object["academic_year"]
@@ -182,36 +220,46 @@ def timetable(root, button1, button2, button3, button4):
    
     class_division = {"Primary": 0, "Secondary": 1, "Higher Secondary": 2}
 
+    div_label = Label(root, text="Division")
+    div_label.grid(row=0, column=0, columnspan=3)
+
     div_dropdown = ttk.Combobox(root, value=list(class_division.keys()))
-    div_dropdown.grid(row=0, column=0, columnspan=9, sticky=W+E)
+    div_dropdown.grid(row=0, column=3, columnspan=6, sticky=W+E)
     div_dropdown.bind("<<ComboboxSelected>>", div_selected)
 
+    class_label = Label(root, text="Class")
+    class_label.grid(row=1, column=0, columnspan=3)
+    
     class_dropdown = ttk.Combobox(root, value=[])
-    class_dropdown.grid(row=1, column=0, columnspan=9, sticky=W+E)
+    class_dropdown.grid(row=1, column=3, columnspan=6, sticky=W+E)
     class_dropdown.bind("<<ComboboxSelected>>", class_selected)
+    
+    teacher_label = Label(root, text="Class teacher: ".upper())
+    teacher_label.grid(row=2, column=0, columnspan=9)
 
     dropdowns_list = [
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", ""]
+        ["", "1", "2", "3", "4", "5", "6", "7", "8"],
+        ["Monday", "", "", "", "", "", "", "", ""],
+        ["Tuesday", "", "", "", "", "", "", "", ""],
+        ["Wednesday", "", "", "", "", "", "", "", ""],
+        ["Thursday", "", "", "", "", "", "", "", ""],
+        ["Friday", "", "", "", "", "", "", "", ""],
+        ["Saturday", "", "", "", "", "", "", ""]
     ]
 
-    for i in range(5):
-        for j in range(8):
-            dropdowns_list[i][j] = ttk.Combobox(root, value=["Hello", "End"])
-            dropdowns_list[i][j].grid(row=i+2, column=j)
-            dropdowns_list[i][j].bind("<<ComboboxSelected>>", lambda event, i=i, j=j: slot_selected(event, i, j))
-    
-    for j in range(7):
-        dropdowns_list[5][j] = ttk.Combobox(root)
-        dropdowns_list[5][j].grid(row=7, column=j)
-        dropdowns_list[5][j].bind("<<ComboboxSelected>>", lambda event, i=5, j=j: slot_selected(event, i, j))
+    for i in range(len(dropdowns_list)):
+        for j in range(len(dropdowns_list[i])):
+            if i and j:
+                dropdowns_list[i][j] = ttk.Combobox(root, value=[])
+                dropdowns_list[i][j].grid(row=i+3, column=j)
+                dropdowns_list[i][j].bind("<<ComboboxSelected>>", lambda event, i=i-1, j=j-1: slot_selected(event, i, j))
+            
+            else:
+                dropdowns_list[i][j] = Label(root, text=dropdowns_list[i][j])
+                dropdowns_list[i][j].grid(row=i+3, column=j)
 
     subject_frame = Frame(root)
-    subject_frame.grid(row=2, column=8, rowspan=6)
+    subject_frame.grid(row=10, column=0, columnspan=8, pady=10)
 
     scroll = Scrollbar(subject_frame, orient=VERTICAL)
     scroll.pack(side=RIGHT, fill='y')
@@ -232,4 +280,4 @@ def timetable(root, button1, button2, button3, button4):
     subject_registered.heading("COUNT", text="COUNT", anchor=CENTER)
     
     back_button = Button(root, text="BACK", command=back)
-    back_button.grid(row=8, column=0, columnspan=8)
+    back_button.grid(row=10, column=8)
