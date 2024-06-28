@@ -6,12 +6,12 @@ from tkinter import messagebox
 from Import_option import import_option
 from Main_window import main_window
 
-academic_year_temp = os.listdir("./Academic_years")
-academic_year_list = []
-for folder in academic_year_temp:
-    academic_year_list.append(folder[:-5].lower())
-
 def Academic_year_window(root) :
+    
+    academic_year_temp = os.listdir("./Academic_years")
+    academic_year_list = []
+    for folder in academic_year_temp:
+        academic_year_list.append(folder[:-5].lower())
     
     root.title("Academic Year")
     root.resizable(False, False)
