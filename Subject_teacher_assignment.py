@@ -564,7 +564,7 @@ def subject_teacher_assignment(root, button1, button2, button3, button4, button5
         if selected_list[7] != 1:
             checkbutton_4.select()
             consecutive_periods_entry.config(state=NORMAL)
-            consecutive_periods_entry.insert(0, selected_list[5])
+            consecutive_periods_entry.insert(0, selected_list[7])
         
         if selected_list[8] == 1:
             checkbutton_3.select()
