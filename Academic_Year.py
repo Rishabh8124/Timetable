@@ -11,7 +11,10 @@ academic_year_list = []
 for folder in academic_year_temp:
     academic_year_list.append(folder[:-5].lower())
 
-def Academic_year_window(root) :    
+def Academic_year_window(root) :
+    
+    root.title("Academic Year")
+    root.resizable(False, False)
 
     def choose() :
 
@@ -20,8 +23,9 @@ def Academic_year_window(root) :
             back_button.destroy()
             confirm_choose.destroy()
 
-            choose_button.grid(row=0, column=0)
-            create_button.grid(row=1, column=0)
+            choose_button.grid(row=0, column=0, padx=40, pady=5)
+            create_button.grid(row=1, column=0, pady=20)
+            root.eval('tk::PlaceWindow . center')
 
         def check_option():
 
@@ -44,15 +48,17 @@ def Academic_year_window(root) :
         choose_button.grid_forget()
         create_button.grid_forget()
 
-        choose_academic = ttk.Combobox(root, values=["Select Academic year"] + academic_year_list)
-        choose_academic.current(0)
-        choose_academic.grid(row=0, column=0, columnspan=2)
+        choose_academic = ttk.Combobox(root, values=academic_year_list, font=ft1)
+        choose_academic.set("Select Academic Year")
+        choose_academic.grid(row=0, column=0, columnspan=2, pady=5, padx=10)
 
-        confirm_choose = Button(root, text="CONFIRM", command=check_option)
-        confirm_choose.grid(row=1, column=0)
+        confirm_choose = Button(root, text="CONFIRM", command=check_option, font=ft)
+        confirm_choose.grid(row=1, column=0, padx=10)
 
-        back_button = Button(root, text="BACK", command=back)
-        back_button.grid(row=1, column=1)
+        back_button = Button(root, text="BACK", command=back, font=ft)
+        back_button.grid(row=1, column=1, padx=10, pady=20)
+        
+        root.eval('tk::PlaceWindow . center')
 
     def create():
 
@@ -62,8 +68,10 @@ def Academic_year_window(root) :
             academic_year_entry.destroy()
             academic_year_label.destroy()
 
-            choose_button.grid(row=0, column=0)
-            create_button.grid(row=1, column=0)
+            choose_button.grid(row=0, column=0, padx=40, pady=5)
+            create_button.grid(row=1, column=0, pady=20)
+            
+            root.eval('tk::PlaceWindow . center')
 
         def create_year():
 
@@ -94,23 +102,31 @@ def Academic_year_window(root) :
         choose_button.grid_forget()
         create_button.grid_forget()
 
-        academic_year_label = Label(root, text="YEAR")
-        academic_year_label.grid(row=0, column=0)
+        academic_year_label = Label(root, text="Academic Year", font=ft1)
+        academic_year_label.grid(row=0, column=0, padx=10, pady=5)
 
-        academic_year_entry = Entry(root)
-        academic_year_entry.grid(row=0, column=1)
+        academic_year_entry = Entry(root, font=ft1)
+        academic_year_entry.grid(row=0, column=1, padx=10, pady=5)
 
-        confirm_button = Button(root, text="ADD ACADEMIC YEAR", command=create_year)
-        confirm_button.grid(row=1, column=0)
+        confirm_button = Button(root, text="ADD", command=create_year, font=ft, pady=3, padx=5)
+        confirm_button.grid(row=1, column=0, padx=50, pady=10)
 
-        back_button = Button(root, text="BACK", command=back)
-        back_button.grid(row=1, column=1)
+        back_button = Button(root, text="BACK", command=back, font=ft, pady=3, padx=5)
+        back_button.grid(row=1, column=1, padx=10, pady=10)
+        
+        root.eval('tk::PlaceWindow . center')
 
     for children in root.winfo_children():
         children.grid_forget()
+        
+    ft = ("Arial", 12)
+    ft1 = ("Arial", 11)
 
-    choose_button = Button(root, text="CHOOSE ACADEMIC YEAR", command=choose)
-    create_button = Button(root, text="CREATE ACADEMIC YEAR", command=create)
+    choose_button = Button(root, text="CHOOSE ACADEMIC YEAR", command=choose, font=ft)
+    create_button = Button(root, text="CREATE ACADEMIC YEAR", command=create, font=ft)
 
-    choose_button.grid(row=0, column=0)
-    create_button.grid(row=1, column=0)
+    choose_button.grid(row=0, column=0, padx=40, pady=5)
+    create_button.grid(row=1, column=0, pady=20)
+    
+    
+    root.eval('tk::PlaceWindow . center')

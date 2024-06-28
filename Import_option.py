@@ -3,6 +3,8 @@ from Import_details import import_details
 from Class_confirmation import class_confirmation
 
 def import_option(root):
+    root.title("Import")
+    
     def button1_click():
         button1.destroy()
         button2.destroy()
@@ -15,8 +17,12 @@ def import_option(root):
         
         class_confirmation(root)
 
-    button1 = Button(root, text="Import Details", command=button1_click)
-    button2 = Button(root, text="Create Details", command=button2_click)
+    ft = ("Arial", 12)
+    
+    button1 = Button(root, text="Import Details".upper(), command=button1_click, padx=5, pady=5, font=ft)
+    button2 = Button(root, text="Create Details".upper(), command=button2_click, padx=5, pady=5, font=ft)
 
-    button1.grid(row=0, column=0)
-    button2.grid(row=1, column=0)
+    button1.grid(row=0, column=0, padx=20, pady=5)
+    button2.grid(row=1, column=0, padx=20, pady=20)
+    
+    root.eval('tk::PlaceWindow . center')

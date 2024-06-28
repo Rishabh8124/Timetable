@@ -5,6 +5,9 @@ from tkinter import ttk
 from tkinter import messagebox
 
 def view_timetable(root, button1, button2, button3, button4, button5):
+    
+    root.title("View Timetable")
+    
     with open("temp.json") as file:
         json_object = json.load(file)
         academic_year = json_object["academic_year"]
@@ -37,11 +40,13 @@ def view_timetable(root, button1, button2, button3, button4, button5):
             if widget not in [button1, button2, button3, button4, button5]:
                 widget.destroy()
 
-        button1.grid(row=0, column=0)
-        button2.grid(row=2, column=0)
-        button3.grid(row=3, column=0)
-        button4.grid(row=4, column=0)
-        button5.grid(row=1, column=0)
+        button1.grid(row=0, column=0, padx=20, pady=12)
+        button2.grid(row=2, column=0, padx=20, pady=12)
+        button3.grid(row=3, column=0, padx=20)
+        button4.grid(row=4, column=0, padx=20, pady=12)
+        button5.grid(row=1, column=0, padx=20)
+        root.title("TIMETABLE")
+        root.eval('tk::PlaceWindow . center')
 
     def drop1_selected(self):
         select = dropdown1.get()
@@ -152,12 +157,12 @@ def view_timetable(root, button1, button2, button3, button4, button5):
         
         messagebox.showinfo("INFO", "Saved in print.csv")
     
-    dropdown1 = ttk.Combobox(root, values=["Class with Teacher name", "Class without Teacher name", "Teacher", "Lab"])
-    dropdown1.grid(row=0, column=0, columnspan=9, sticky=W+E)
+    dropdown1 = ttk.Combobox(root, values=["Class with Teacher name", "Class without Teacher name", "Teacher", "Lab"], font=("Arial", 10))
+    dropdown1.grid(row=0, column=2, columnspan=5, sticky=W+E, pady=5)
     dropdown1.bind("<<ComboboxSelected>>", drop1_selected)
 
-    dropdown2 = ttk.Combobox(root)
-    dropdown2.grid(row=1, column=0, columnspan=9, sticky=W+E)
+    dropdown2 = ttk.Combobox(root, font=("Arial", 10))
+    dropdown2.grid(row=1, column=2, columnspan=5, sticky=W+E)
     dropdown2.bind("<<ComboboxSelected>>", drop2_selected)
 
     day = {
@@ -171,20 +176,25 @@ def view_timetable(root, button1, button2, button3, button4, button5):
 
     for i in range(len(timetable_structure)):
         for j in range(len(timetable_structure[i])):
-            if (i and j): timetable_structure[i][j] = Label(root, text='', width=18)
-            elif (i): timetable_structure[i][j] = Label(root, text=day[i], width=18)
-            elif (j): timetable_structure[i][j] = Label(root, text=str(j), width=18)
+            if (i and j): timetable_structure[i][j] = Label(root, text='', width=18, font=("Arial", 10), highlightthickness=1, highlightbackground = "black", highlightcolor= "black")
+            elif (i): timetable_structure[i][j] = Label(root, text=day[i], width=18, padx=30, font=("Arial", 10))
+            elif (j): timetable_structure[i][j] = Label(root, text=str(j), width=18, pady=10, font=("Arial", 10))
             
-            if (i or j): timetable_structure[i][j].grid(row=i+2, column=j, sticky=W+E)
+            if (i or j): timetable_structure[i][j].grid(row=i+2, column=j, sticky=W+E, padx=1, pady=1)
 
-    print_button_1 = Button(root, text="Print Teacher timetables".upper(), command=print_teachers)
-    print_button_1.grid(row=9, column=0, columnspan=2)
+    print_button_1 = Button(root, text="Print Teacher timetables".upper(), command=print_teachers, font=("Arial", 11))
+    print_button_1.grid(row=9, column=0, columnspan=2, pady=15, sticky=W+E, padx=5)
     
-    print_button_2 = Button(root, text="Print Class Timeatables".upper(), command=print_class)
-    print_button_2.grid(row=9, column=2, columnspan=2)
+    print_button_2 = Button(root, text="Print Class Timeatables".upper(), command=print_class, font=("Arial", 11))
+    print_button_2.grid(row=9, column=2, columnspan=2, sticky=W+E, padx=5)
     
-    print_button_3 = Button(root, text="Print Timetable".upper(), command=print_current)
-    print_button_3.grid(row=9, column=4, columnspan=2)
+    print_button_3 = Button(root, text="Print Timetable".upper(), command=print_current, font=("Arial", 11))
+    print_button_3.grid(row=9, column=4, columnspan=2, sticky=W+E, padx=5)
     
-    back_button = Button(root, text="BACK", command=back)
-    back_button.grid(row=9, column=6, columnspan=3)
+    back_button = Button(root, text="BACK", command=back, font=("Arial", 11))
+    back_button.grid(row=9, column=6, columnspan=3, sticky=W+E, padx=5)
+    
+    temp = Label(root, text=" ", padx=3)
+    temp.grid(row=9, column=9)
+    
+    root.eval('tk::PlaceWindow . center')

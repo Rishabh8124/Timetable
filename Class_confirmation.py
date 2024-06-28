@@ -7,6 +7,8 @@ from Lab_list_confirmation import lab_confirmation
 
 def class_confirmation(root):
 
+    root.title("Class List")
+    
     def confirm():
         academic_year_dictionary = {}
         final_class_list = []
@@ -112,18 +114,22 @@ def class_confirmation(root):
             for j in json_object["class_list"][i]:
                 class_list[(int(i) > 5) + (int(i) > 10)].append(i+j)
 
-    class_list_label = Label(root, text="CLASS LIST")
-    class_list_label.grid(row=0, column=0, columnspan=3)
+    class_list_label = Label(root, text="CLASS LIST", font=("Arial", 13))
+    class_list_label.grid(row=0, column=0, columnspan=3, pady=8)
+    
+    style = ttk.Style(root)
+    style.configure('Treeview', font=("Arial", 9))
+    style.configure('Treeview.Heading', font=("Arial", 10))
 
     for i in range(3):
 
         frames[i] = Frame(root)
-        frames[i].grid(row=2, column=i)
+        frames[i].grid(row=2, column=i, padx=10)
 
         scrolls[i] = Scrollbar(frames[i], orient=VERTICAL)
         scrolls[i].pack(side=RIGHT, fill='y')
 
-        classes[i] = ttk.Treeview(frames[i], height=5, yscrollcommand=scrolls[i].set)
+        classes[i] = ttk.Treeview(frames[i], height=4, yscrollcommand=scrolls[i].set)
         classes[i].pack()
 
         scrolls[i].config(command=classes[i].yview)
@@ -132,21 +138,27 @@ def class_confirmation(root):
 
         classes[i].column("#0", width=0, stretch=NO)
 
-        classes[i].column("Class", width=50, anchor=CENTER)
+        classes[i].column("Class", width=70, anchor=CENTER)
         classes[i].heading("Class", text="CLASS", anchor=CENTER)
 
         for class_name in class_list[i]:
             classes[i].insert(parent='', index=END, iid=class_name, text='', value=[class_name])
         
-        if (i == 0): add[i] = Button(root, text="Add", command= lambda: add_command(0))
-        elif (i == 1): add[i] = Button(root, text="Add", command= lambda: add_command(1))
-        elif (i == 2): add[i] = Button(root, text="Add", command= lambda: add_command(2))
-        add[i].grid(row=3, column=i)
+        if (i == 0): add[i] = Button(root, text="ADD", command= lambda: add_command(0), font=("Arial", 10))
+        elif (i == 1): add[i] = Button(root, text="ADD", command= lambda: add_command(1), font=("Arial", 10))
+        elif (i == 2): add[i] = Button(root, text="ADD", command= lambda: add_command(2), font=("Arial", 10))
+        add[i].grid(row=3, column=i, sticky=W+E, padx=10, pady=8)
         
-        if (i == 0): delete[i] = Button(root, text="Delete", command= lambda: delete_command(0))
-        elif (i == 1): delete[i] = Button(root, text="Delete", command= lambda: delete_command(1))
-        elif (i == 2): delete[i] = Button(root, text="Delete", command= lambda: delete_command(2))
-        delete[i].grid(row=4, column=i)
+        if (i == 0): delete[i] = Button(root, text="DELETE", command= lambda: delete_command(0), font=("Arial", 10))
+        elif (i == 1): delete[i] = Button(root, text="DELETE", command= lambda: delete_command(1), font=("Arial", 10))
+        elif (i == 2): delete[i] = Button(root, text="DELETE", command= lambda: delete_command(2), font=("Arial", 10))
+        delete[i].grid(row=4, column=i, sticky=W+E, padx=10)
     
-    confirm_button = Button(root, text="CONFIRM CLASSES", command=confirm)
-    confirm_button.grid(row=5, column=0, columnspan=3)
+    confirm_button = Button(root, text="CONFIRM CLASSES", command=confirm, font=("Arial", 10))
+    confirm_button.grid(row=5, column=0, columnspan=3, pady=8)
+    
+    root.eval('tk::PlaceWindow . center')
+
+# root = Tk()
+# class_confirmation(root)
+# root.mainloop()

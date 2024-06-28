@@ -4,17 +4,21 @@ from tkinter import ttk
 from tkinter import messagebox
 
 def timetable(root, button1, button2, button3, button4, button5):
+    
+    root.title("Timetable")
 
     def back():
         for widget in root.winfo_children():
             if widget not in [button1, button2, button3, button4, button5]:
                 widget.destroy()
 
-        button1.grid(row=0, column=0)
-        button2.grid(row=2, column=0)
-        button3.grid(row=3, column=0)
-        button4.grid(row=4, column=0)
-        button5.grid(row=1, column=0)
+        button1.grid(row=0, column=0, padx=20, pady=12)
+        button2.grid(row=2, column=0, padx=20, pady=12)
+        button3.grid(row=3, column=0, padx=20)
+        button4.grid(row=4, column=0, padx=20, pady=12)
+        button5.grid(row=1, column=0, padx=20)
+        root.title("TIMETABLE")
+        root.eval('tk::PlaceWindow . center')
 
     def div_selected(self):
         div_select = div_dropdown.get()
@@ -215,26 +219,28 @@ def timetable(root, button1, button2, button3, button4, button5):
 
         for i in class_list:
             class_list_combined.extend(i)
-
-        lab_list = json_object["lab_list"]
-   
+    
+    style = ttk.Style(root)
+    style.configure('Treeview', font=("Arial", 10))
+    style.configure('Treeview.Heading', font=("Arial", 11))
+    
     class_division = {"Primary": 0, "Secondary": 1, "Higher Secondary": 2}
 
-    div_label = Label(root, text="Division")
-    div_label.grid(row=0, column=0, columnspan=3)
+    div_label = Label(root, text="DIVISION", font=("Arial", 10))
+    div_label.grid(row=0, column=2, pady=7)
 
-    div_dropdown = ttk.Combobox(root, value=list(class_division.keys()))
-    div_dropdown.grid(row=0, column=3, columnspan=6, sticky=W+E)
+    div_dropdown = ttk.Combobox(root, value=list(class_division.keys()), font=("Arial", 10))
+    div_dropdown.grid(row=0, column=3, columnspan=4, sticky=W+E)
     div_dropdown.bind("<<ComboboxSelected>>", div_selected)
 
-    class_label = Label(root, text="Class")
-    class_label.grid(row=1, column=0, columnspan=3)
+    class_label = Label(root, text="CLASS", font=("Arial", 10))
+    class_label.grid(row=1, column=2)
     
-    class_dropdown = ttk.Combobox(root, value=[])
-    class_dropdown.grid(row=1, column=3, columnspan=6, sticky=W+E)
+    class_dropdown = ttk.Combobox(root, value=[], font=("Arial", 10))
+    class_dropdown.grid(row=1, column=3, columnspan=4, sticky=W+E)
     class_dropdown.bind("<<ComboboxSelected>>", class_selected)
     
-    teacher_label = Label(root, text="Class teacher: ".upper())
+    teacher_label = Label(root, text="Class teacher: ".upper(), font=("Arial", 11), pady=10)
     teacher_label.grid(row=2, column=0, columnspan=9)
 
     dropdowns_list = [
@@ -250,16 +256,16 @@ def timetable(root, button1, button2, button3, button4, button5):
     for i in range(len(dropdowns_list)):
         for j in range(len(dropdowns_list[i])):
             if i and j:
-                dropdowns_list[i][j] = ttk.Combobox(root, value=[])
-                dropdowns_list[i][j].grid(row=i+3, column=j)
+                dropdowns_list[i][j] = ttk.Combobox(root, value=[], font=("Arial", 10))
+                dropdowns_list[i][j].grid(row=i+3, column=j, padx=1, pady=1)
                 dropdowns_list[i][j].bind("<<ComboboxSelected>>", lambda event, i=i-1, j=j-1: slot_selected(event, i, j))
             
             else:
-                dropdowns_list[i][j] = Label(root, text=dropdowns_list[i][j])
-                dropdowns_list[i][j].grid(row=i+3, column=j)
+                dropdowns_list[i][j] = Label(root, text=dropdowns_list[i][j].upper(), font=("Arial", 10))
+                dropdowns_list[i][j].grid(row=i+3, column=j, padx=20, pady=1)
 
     subject_frame = Frame(root)
-    subject_frame.grid(row=10, column=0, columnspan=8, pady=10)
+    subject_frame.grid(row=10, column=0, columnspan=8, pady=20)
 
     scroll = Scrollbar(subject_frame, orient=VERTICAL)
     scroll.pack(side=RIGHT, fill='y')
@@ -276,8 +282,13 @@ def timetable(root, button1, button2, button3, button4, button5):
     subject_registered.column("SUBJECT", anchor=CENTER)
     subject_registered.heading("SUBJECT", text="SUBJECT", anchor=CENTER)
 
-    subject_registered.column("COUNT", width=80, anchor=CENTER)
+    subject_registered.column("COUNT", anchor=CENTER)
     subject_registered.heading("COUNT", text="COUNT", anchor=CENTER)
     
-    back_button = Button(root, text="BACK", command=back)
-    back_button.grid(row=10, column=8)
+    back_button = Button(root, text="BACK", command=back, pady=5, font=("Arial", 10))
+    back_button.grid(row=10, column=8, sticky=W+E)
+    
+    temp = Label(root, text="")
+    temp.grid(row=10, column=9, padx=3)
+
+    root.eval('tk::PlaceWindow . center')

@@ -4,17 +4,20 @@ from tkinter import ttk
 from tkinter import messagebox
 
 def class_teacher(root, button1, button2, button3, button4, button5):
+    root.title("Class teacher")
     
     def back():
         for widget in root.winfo_children():
             if widget not in [button1, button2, button3, button4, button5]:
                 widget.destroy()
 
-        button1.grid(row=0, column=0)
-        button2.grid(row=2, column=0)
-        button3.grid(row=3, column=0)
-        button4.grid(row=4, column=0)
-        button5.grid(row=1, column=0)
+        button1.grid(row=0, column=0, padx=20, pady=12)
+        button2.grid(row=2, column=0, padx=20, pady=12)
+        button3.grid(row=3, column=0, padx=20)
+        button4.grid(row=4, column=0, padx=20, pady=12)
+        button5.grid(row=1, column=0, padx=20)
+        root.title("TIMETABLE")
+        root.eval('tk::PlaceWindow . center')
         
     def div_selected(self):
         div_select = div_dropdown.get()
@@ -73,28 +76,30 @@ def class_teacher(root, button1, button2, button3, button4, button5):
     class_division = {"Primary": 0, "Secondary": 1, "Higher Secondary": 2}
     current = Label(root, text="")
 
-    division_label = Label(root, text="Division")
-    division_label.grid(row=0, column=0)
+    division_label = Label(root, text="DIVISION", font=("Arial", 11))
+    division_label.grid(row=0, column=0, pady=10, padx=10)
 
-    div_dropdown = ttk.Combobox(root, value=list(class_division.keys()))
-    div_dropdown.grid(row=0, column=1)
+    div_dropdown = ttk.Combobox(root, value=list(class_division.keys()), font=("Arial", 11))
+    div_dropdown.grid(row=0, column=1, pady=10, padx=10)
     div_dropdown.bind("<<ComboboxSelected>>", div_selected)
 
-    class_label = Label(root, text="Class")
-    class_label.grid(row=1, column=0)
+    class_label = Label(root, text="CLASS", font=("Arial", 11))
+    class_label.grid(row=1, column=0, padx=80, pady=10)
     
-    class_dropdown = ttk.Combobox(root, value=class_list[0])
-    class_dropdown.grid(row=1, column=1)
+    class_dropdown = ttk.Combobox(root, value=class_list[0], font=("Arial", 11))
+    class_dropdown.grid(row=1, column=1, pady=10, padx=10)
     class_dropdown.bind("<<ComboboxSelected>>", class_selected)
     
-    teacher_label = Label(root, text="Class teacher")
-    teacher_label.grid(row=2, column=0)
+    teacher_label = Label(root, text="TEACHER", font=("Arial", 11))
+    teacher_label.grid(row=2, column=0, pady=10, padx=10)
     
-    teacher_dropdown = ttk.Combobox(root, value=teacher_list)
-    teacher_dropdown.grid(row=2, column=1)
+    teacher_dropdown = ttk.Combobox(root, value=teacher_list, font=("Arial", 11))
+    teacher_dropdown.grid(row=2, column=1, pady=10, padx=10)
     
-    assign_button = Button(root, text="ASSIGN", command=assign)
-    assign_button.grid(row=3, column=0)
+    assign_button = Button(root, text="ASSIGN", command=assign, font=("Arial", 11))
+    assign_button.grid(row=3, column=0, sticky=W+E, pady=10, padx=10)
     
-    back_button = Button(root, text='BACK', command=back)
-    back_button.grid(row=3, column=1)
+    back_button = Button(root, text='BACK', command=back, font=("Arial", 11))
+    back_button.grid(row=3, column=1, sticky=W+E, pady=10, padx=10)
+    
+    root.eval('tk::PlaceWindow . center')

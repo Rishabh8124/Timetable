@@ -4,6 +4,8 @@ from tkinter import ttk
 from tkinter import messagebox
 
 def Teacher_Confirmation(root, button1, button2, button3, button4, button5):
+    
+    root.title("Teacher List")
 
     def back_1():
         Id_Label.config(text="TEACHER ID")
@@ -12,18 +14,20 @@ def Teacher_Confirmation(root, button1, button2, button3, button4, button5):
 
         back_button_1.grid_forget()
         add_button.grid_forget()
-        add_button.grid(row=4, column=0, columnspan=2, sticky=W+E)
+        add_button.grid(row=4, column=0, columnspan=2, sticky=W+E, padx=10)
 
     def confirm():
         for widget in root.winfo_children():
             if widget not in [button1, button2, button3, button4, button5]:
                 widget.destroy()
 
-        button1.grid(row=0, column=0)
-        button2.grid(row=2, column=0)
-        button3.grid(row=3, column=0)
-        button4.grid(row=4, column=0)
-        button5.grid(row=1, column=0)
+        button1.grid(row=0, column=0, padx=20, pady=12)
+        button2.grid(row=2, column=0, padx=20, pady=12)
+        button3.grid(row=3, column=0, padx=20)
+        button4.grid(row=4, column=0, padx=20, pady=12)
+        button5.grid(row=1, column=0, padx=20)
+        root.title("TIMETABLE")
+        root.eval('tk::PlaceWindow . center')
 
     def add():
         id = Id_entry.get()
@@ -127,8 +131,8 @@ def Teacher_Confirmation(root, button1, button2, button3, button4, button5):
         add_button.config(text="SAVE", command=save)
 
         add_button.grid_forget()
-        add_button.grid(row=4, column=0, sticky=W+E)
-        back_button_1.grid(row=4, column=1, sticky=W+E)
+        add_button.grid(row=4, column=0, sticky=W+E, padx=10)
+        back_button_1.grid(row=4, column=1, sticky=W+E, padx=10)
 
     def save():
         id = Id_entry.get()
@@ -203,7 +207,7 @@ def Teacher_Confirmation(root, button1, button2, button3, button4, button5):
 
         back_button_1.grid_forget()
         add_button.grid_forget()
-        add_button.grid(row=4, column=0, columnspan=2, sticky=W+E)
+        add_button.grid(row=4, column=0, columnspan=2, sticky=W+E, padx=10)
 
         file = open("./Academic_years/"+academic_year+".json", 'w')
         file.write(json.dumps(json_object, indent=4))
@@ -216,13 +220,17 @@ def Teacher_Confirmation(root, button1, button2, button3, button4, button5):
         json_object = json.load(file)
         academic_year = json_object['academic_year']
 
+    style = ttk.Style(root)
+    style.configure('Treeview', font=("Arial", 10))
+    style.configure('Treeview.Heading', font=("Arial", 11))
+    
     file = open("./Academic_years/"+academic_year+".json", 'r')
     json_object = json.load(file)
     teacher_list = json_object["teacher_list"]
     file.close()
 
     list_frame = Frame(root)
-    list_frame.grid(row=0, column=0, columnspan=2)
+    list_frame.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
 
     list_scroll = Scrollbar(list_frame, orient=VERTICAL)
     list_scroll.pack(side=RIGHT, fill='y')
@@ -236,7 +244,7 @@ def Teacher_Confirmation(root, button1, button2, button3, button4, button5):
 
     teacher_list_tree.column("#0", width=0, stretch=NO)
 
-    teacher_list_tree.column("TEACHER ID", width=100, anchor=CENTER)
+    teacher_list_tree.column("TEACHER ID", width=150, anchor=CENTER)
     teacher_list_tree.heading("TEACHER ID", text="TEACHER ID", anchor=CENTER)
 
     teacher_list_tree.column("NAME", width=150, anchor=CENTER)
@@ -245,28 +253,31 @@ def Teacher_Confirmation(root, button1, button2, button3, button4, button5):
     for teacher in teacher_list:
         teacher_list_tree.insert(parent='', index=END, iid=teacher[0], text='', value=teacher)
     
-    edit_button = Button(root, text="EDIT", command=edit_replace)
-    edit_button.grid(row=1, column=0, sticky=W+E)
+    edit_button = Button(root, text="EDIT", command=edit_replace, font=("Arial", 11))
+    edit_button.grid(row=1, column=0, sticky=W+E, padx=10, pady=5)
 
-    delete_button = Button(root, text="DELETE", command=delete)
-    delete_button.grid(row=1, column=1, sticky=W+E)
+    delete_button = Button(root, text="DELETE", command=delete, font=("Arial", 11))
+    delete_button.grid(row=1, column=1, sticky=W+E, padx=10, pady=5)
 
-    Id_Label = Label(root, text="TEACHER ID: ")
-    Id_Label.grid(row=2, column=0)
+    Id_Label = Label(root, text="TEACHER ID: ", font=("Arial", 11))
+    Id_Label.grid(row=2, column=0, pady=5)
     
-    Id_entry = Entry(root)
-    Id_entry.grid(row=2, column=1)
+    Id_entry = Entry(root, font=("Arial", 11))
+    Id_entry.grid(row=2, column=1, pady=5)
 
-    name_label = Label(root, text="NAME: ")
-    name_label.grid(row=3, column=0)
+    name_label = Label(root, text="NAME: ", font=("Arial", 11))
+    name_label.grid(row=3, column=0, pady=5)
 
-    name_entry = Entry(root)
-    name_entry.grid(row=3, column=1)
+    name_entry = Entry(root, font=("Arial", 11))
+    name_entry.grid(row=3, column=1, pady=5)
     
-    add_button = Button(root, text="ADD", command=add)
-    add_button.grid(row=4, column=0, columnspan=2, sticky=W+E)
+    add_button = Button(root, text="ADD", command=add, font=("Arial", 11))
+    add_button.grid(row=4, column=0, columnspan=2, sticky=W+E, pady=5, padx=10)
 
-    back_button_1 = Button(root, text="CANCEL", command=back_1)
+    back_button_1 = Button(root, text="CANCEL", command=back_1, font=("Arial", 11))
 
-    back_button = Button(root, text="BACK", command=confirm)
-    back_button.grid(row=5, column=0, columnspan=2, sticky=W+E)
+    back_button = Button(root, text="BACK", command=confirm, font=("Arial", 11))
+    back_button.grid(row=5, column=0, columnspan=2, sticky=W+E, pady=5, padx=10)
+    
+    root.eval('tk::PlaceWindow . center')
+

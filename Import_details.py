@@ -136,24 +136,29 @@ def import_details(root):
 
         main_window(root)
 
-    dropdown = ttk.Combobox(root, values=academic_year_list)
-    dropdown.grid(row=0, column=0)
+    ft = ("Arial", 10)
+    ft1 = ("Arial", 11)
+    
+    dropdown = ttk.Combobox(root, values=academic_year_list, font=ft1)
+    dropdown.grid(row=0, column=0, pady=5)
     dropdown.set("Select Academic Year")
 
     checkbutton1_variable = IntVar()
-    checkbutton1 = Checkbutton(root, text='TEACHER LIST', variable=checkbutton1_variable, onvalue=1, offvalue=0, command=checkbutton_1_function) # command
-    checkbutton1.grid(row=1, column=0)
+    checkbutton1 = Checkbutton(root, text='TEACHER LIST', variable=checkbutton1_variable, onvalue=1, offvalue=0, command=checkbutton_1_function, font=ft) # command
+    checkbutton1.grid(row=1, column=0, pady=5)
 
     checkbutton2_variable = IntVar()
-    checkbutton2 = Checkbutton(root, text='CLASS - SUBJECT - TEACHER ASSIGNMENT', variable=checkbutton2_variable, onvalue=1, offvalue=0, state=DISABLED, command=checkbutton_2_function)
-    checkbutton2.grid(row=2, column=0)
+    checkbutton2 = Checkbutton(root, text='CLASS - SUBJECT - TEACHER ASSIGNMENT', variable=checkbutton2_variable, onvalue=1, offvalue=0, state=DISABLED, command=checkbutton_2_function, font=ft)
+    checkbutton2.grid(row=2, column=0, pady=5, padx=10)
 
     checkbutton3_variable = IntVar()
-    checkbutton3 = Checkbutton(root, text='TIMETABLE', variable=checkbutton3_variable, onvalue=1, offvalue=0, state=DISABLED, command=checkbutton_3_function)
-    checkbutton3.grid(row=3, column=0)
+    checkbutton3 = Checkbutton(root, text='TIMETABLE', variable=checkbutton3_variable, onvalue=1, offvalue=0, state=DISABLED, command=checkbutton_3_function, font=ft)
+    checkbutton3.grid(row=3, column=0, pady=5)
 
-    import_button = Button(root, text="IMPORT", command=import_function)
-    import_button.grid(row=4, column=0)
+    import_button = Button(root, text="IMPORT", command=import_function, font=ft)
+    import_button.grid(row=4, column=0, pady=10)
+    
+    root.eval('tk::PlaceWindow . center')
 
 # root = Tk()
 # import_details(root)
