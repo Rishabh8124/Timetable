@@ -86,8 +86,8 @@ def lab_confirmation(root):
         widget.grid_forget()
         
     style = ttk.Style(root)
-    style.configure('Treeview', font=("Arial", 9))
-    style.configure('Treeview.Heading', font=("Arial", 10))
+    style.configure('Treeview', font=("Arial", 10))
+    style.configure('Treeview.Heading', font=("Arial", 11))
 
     list_frame = Frame(root)
     list_frame.grid(row=0, column=0, columnspan=2, sticky=W+E, padx=10)
@@ -107,19 +107,19 @@ def lab_confirmation(root):
     lab_list_tree.column("NAME", anchor=CENTER)
     lab_list_tree.heading("NAME", text="LAB NAME", anchor=CENTER)
     
-    delete_button = Button(root, text="DELETE", command=delete, font=("Arial", 10))
+    delete_button = Button(root, text="DELETE", command=delete, font=("Arial", 11))
     delete_button.grid(row=1, column=0, columnspan=2, sticky=W+E, padx=10, pady=8)
 
-    name_label = Label(root, text="LAB NAME: ", font=("Arial", 10))
+    name_label = Label(root, text="LAB NAME: ", font=("Arial", 11))
     name_label.grid(row=3, column=0, padx=10)
 
-    name_entry = Entry(root, font=("Arial", 10))
+    name_entry = Entry(root, font=("Arial", 11))
     name_entry.grid(row=3, column=1, padx=10)
     
-    add_button = Button(root, text="ADD", command=add, font=("Arial", 10))
+    add_button = Button(root, text="ADD", command=add, font=("Arial", 11))
     add_button.grid(row=4, column=0, columnspan=2, sticky=W+E, pady=8, padx=10)
 
-    finalize_button = Button(root, text="FINALIZE", command=finalize, font=("Arial", 10))
+    finalize_button = Button(root, text="FINALIZE", command=finalize, font=("Arial", 11))
     finalize_button.grid(row=5, column=0, columnspan=2, sticky=W+E, pady=6, padx=10)
     
     root.eval('tk::PlaceWindow . center')
