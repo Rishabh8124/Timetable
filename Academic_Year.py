@@ -119,8 +119,8 @@ def Academic_year_window(root) :
     for children in root.winfo_children():
         children.grid_forget()
         
-    ft = ("Arial", 12)
-    ft1 = ("Arial", 11)
+    ft = ("Arial", 15)
+    ft1 = ("Arial", 13)
 
     choose_button = Button(root, text="CHOOSE ACADEMIC YEAR", command=choose, font=ft)
     create_button = Button(root, text="CREATE ACADEMIC YEAR", command=create, font=ft)

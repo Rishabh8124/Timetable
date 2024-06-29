@@ -56,19 +56,19 @@ def main_window(root):
 
         view_timetable(root, add_teacher_button, subject_registration_button, timetable_button, view_timetable_button, assign_class_teacher_button)
 
-    add_teacher_button = Button(root, text="ADD TEACHER", command=add_teacher, font=("Arial", 11))
+    add_teacher_button = Button(root, text="ADD TEACHER", command=add_teacher, font=("Arial", 13))
     add_teacher_button.grid(row=0, column=0, padx=20, pady=12)
     
-    assign_class_teacher_button = Button(root, text="ASSIGN CLASS TEACHER", command=assign_teacher, font=("Arial", 11))
+    assign_class_teacher_button = Button(root, text="ASSIGN CLASS TEACHER", command=assign_teacher, font=("Arial", 13))
     assign_class_teacher_button.grid(row=1, column=0, padx=20)
 
-    subject_registration_button = Button(root, text="SUBJECT REGISTRATION", command=subject_registration, font=("Arial", 11))
+    subject_registration_button = Button(root, text="SUBJECT REGISTRATION", command=subject_registration, font=("Arial", 13))
     subject_registration_button.grid(row=2, column=0, padx=20, pady=12)
 
-    timetable_button = Button(root, text="ASSIGN TIMETABLE", command=timetable_button_function, font=("Arial", 11))
+    timetable_button = Button(root, text="ASSIGN TIMETABLE", command=timetable_button_function, font=("Arial", 13))
     timetable_button.grid(row=3, column=0, padx=20)
 
-    view_timetable_button = Button(root, text="VIEW TIMETABLE", command=view_timetable_function, font=("Arial", 11))
+    view_timetable_button = Button(root, text="VIEW TIMETABLE", command=view_timetable_function, font=("Arial", 13))
     view_timetable_button.grid(row=4, column=0, padx=20, pady=12)
     
     root.eval('tk::PlaceWindow . center')
