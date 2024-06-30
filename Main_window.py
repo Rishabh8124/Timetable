@@ -7,6 +7,7 @@ from Class_teachers import class_teacher
 from Staff_report import print_staff_report
 from free_teachers import get_free_teachers
 from find_teacher import find_teacher
+from Class_report import print_class_report
 
 def main_window(root):
     root.title("TIMETABLE")
@@ -126,7 +127,7 @@ def main_window(root):
     find_teacher_button = Button(root, text="FIND TEACHER", command=find_teacher_function, font=("Arial", 13))
     find_teacher_button.grid(row=3, column=1, padx=20)
     
-    class_report_button = Button(root, text="PRINT CLASS REPORT", font=("Arial", 13))
+    class_report_button = Button(root, text="PRINT CLASS REPORT", command=print_class_report, font=("Arial", 13))
     class_report_button.grid(row=4, column=0, padx=20, pady=12)
     
     staff_report_button = Button(root, text="PRINT STAFF REPORT", command=print_staff_report, font=("Arial", 13))

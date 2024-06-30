@@ -12,16 +12,16 @@ def print_staff_report():
         json_object = json.load(file)
         teacher_list = json_object["teacher_list"]
     
-    final_list = []
+    final_list = [["Teacher ID", "Teacher Name", "Subject Handling", "Classes Handling"]]
     for teacher in teacher_list:
-        teacher_details = (json_object[teacher[0]+'-'+teacher[1]]["class_list"])
+        teacher_details = json_object[teacher[0]+'-'+teacher[1]]["class_list"]
         for i in teacher_details:
             class_list = set()
             for j in teacher_details[i]:
                 for k in j:
                     class_list.add(k)
             teacher_details[i] = class_list
-            final_list.append(teacher+ [i] + [sorted(list(class_list))])
+            final_list.append(teacher+ [i] + [", ".join(sorted(list(class_list)))])
     
     with open("Print.csv", "w", newline='') as file:
         csvwriter = csv.writer(file)
