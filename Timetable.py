@@ -3,20 +3,25 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 
-def timetable(root, button1, button2, button3, button4, button5):
+def timetable(root, button1, button2, button3, button4, button5, button6, button7, button8, button9):
     
     root.title("Timetable")
 
     def back():
         for widget in root.winfo_children():
-            if widget not in [button1, button2, button3, button4, button5]:
+            if widget not in [button1, button2, button3, button4, button5, button6, button7, button8, button9]:
                 widget.destroy()
 
         button1.grid(row=0, column=0, padx=20, pady=12)
-        button2.grid(row=2, column=0, padx=20, pady=12)
-        button3.grid(row=3, column=0, padx=20)
-        button4.grid(row=4, column=0, padx=20, pady=12)
-        button5.grid(row=1, column=0, padx=20)
+        button2.grid(row=0, column=1, padx=20, pady=12)
+        button3.grid(row=1, column=0, columnspan=2, padx=20)
+        button4.grid(row=2, column=0, padx=20, pady=12)
+        button5.grid(row=2, column=1, padx=20, pady=12)
+        button6.grid(row=3, column=0, padx=20)
+        button7.grid(row=3, column=1, padx=20)
+        button8.grid(row=4, column=0, padx=20, pady=12)
+        button9.grid(row=4, column=1, padx=20, pady=12)
+        
         root.title("TIMETABLE")
         root.eval('tk::PlaceWindow . center')
 
@@ -66,6 +71,85 @@ def timetable(root, button1, button2, button3, button4, button5):
                     dropdowns_list[i][j].current(final_subject_list.index(class_timetable[i-1][j-1]))
     
     def slot_selected(self, i, j):
+        
+        def check(subject_details, subject_chosen, json_object, t):                
+            condition = True
+            
+            subject = subject_chosen.split('::')[0]
+            teacher_selected = ""
+            if '::' in subject_chosen:
+                teacher_selected = subject_chosen.split('::')[1]
+
+            subject_chosen_details = subject_details[subject]
+            
+            if subject_chosen_details[6][i] == 0:
+                if t: messagebox.showwarning("WARNING", "Selected subject cannot be handled on the specified day")
+                condition = False
+            
+            if subject_chosen_details[5] == 1:
+                c = 0
+                for y in json_object[subject_chosen_details[4][0]]["timetable"][i]:
+                    if y and y.split("::")[0] == subject: c += 1
+                if c:
+                    if t: messagebox.showwarning("WARNING", "Selected subject cannot have 2 classes on the same day")
+                    condition = False
+            
+            if int(subject_chosen_details[-3])+j > len(json_object[subject_chosen_details[4][0]]["timetable"][i]):
+                if t: messagebox.showwarning("WARNING", "Number of periods available is less than alloted count")
+                condition = False
+                
+            for k in range(int(subject_chosen_details[-3])):
+                if condition == False: break
+                
+                if teacher_selected == '':
+                    for teacher in subject_chosen_details[2]:
+                        if json_object[teacher]["timetable"][i][j+k]:
+                            if t: messagebox.showwarning("WARNING", teacher+" has "+str(json_object[teacher]["timetable"][i][j])+" during the selected slot")
+                            condition = False
+                            break
+                    if condition == False: break
+                else:
+                    if json_object[teacher_selected]["timetable"][i][j+k]:
+                        if t: messagebox.showwarning("WARNING", teacher_selected+" has "+str(json_object[teacher_selected]["timetable"][i][j])+" during the selected slot")
+                        condition = False
+                        break
+
+                for classes in subject_chosen_details[4]:
+                    if json_object[classes]["timetable"][i][j+k]:
+                        if t: messagebox.showwarning("WARNING", classes+" has "+json_object[classes]["timetable"][i][j]+" during the selected slot")
+                        condition = False
+                        break
+                if condition == False: break
+
+                for lab in subject_chosen_details[3]:
+                    if json_object[lab]["timetable"][i][j+k]:
+                        if t: messagebox.showwarning("WARNING", lab+" has "+str(json_object[lab]["timetable"][i][j])+" during the selected slot")
+                        condition = False
+                        break
+                if condition == False: break
+            
+            if condition and int(subject_chosen_details[-3])+int(subject_chosen_details[-1]) > int(subject_chosen_details[1]):
+                if t: messagebox.showwarning("WARNING", "The number of classes per week has exceeded the limit")
+                condition = False
+            
+            if condition and t:
+                for teacher in subject_chosen_details[2]:
+                    j2 = j-1
+                    count = int(subject_chosen_details[-3])
+                    while(j2>=0 and json_object[teacher]["timetable"][i][j2]):
+                        j2 -= 1
+                        count += 1
+                    j2 = j+k
+                    while(j2 < len(json_object[teacher]["timetable"][i]) and json_object[teacher]["timetable"][i][j2]):
+                        j2 += 1
+                        count += 1
+                    
+                    if count > 4:
+                        condition = messagebox.askyesno("LIMIT", "Assigning this subject makes "+str(count)+" periods consecutively for "+teacher+"\nDo you want to assign?")
+                        if not condition: break
+            
+            return condition
+        
         class_name = class_dropdown.get()
 
         file = open('./Academic_years/'+academic_year+".json", 'r')
@@ -123,49 +207,7 @@ def timetable(root, button1, button2, button3, button4, button5):
 
             subject_chosen_details = subject_details[subject]
             
-            if subject_chosen_details[6][i] == 0:
-                messagebox.showwarning("WARNING", "Selected subject cannot be handled on the specified day")
-                condition = False
-            
-            if subject_chosen_details[5] == 1:
-                c = 0
-                for y in json_object[subject_chosen_details[4][0]]["timetable"][i]:
-                    if y and y.split("::")[0] == subject: c += 1
-                if c:
-                    messagebox.showwarning("WARNING", "Selected subject cannot have 2 classes on the same day")
-                    condition = False
-            
-            if int(subject_chosen_details[-3])+j > len(json_object[subject_chosen_details[4][0]]["timetable"][i]):
-                messagebox.showwarning("WARNING", "Number of periods available is less than alloted count")
-                condition = False
-                
-            for k in range(int(subject_chosen_details[-3])):
-                if condition == False:
-                    break
-                
-                if teacher_selected == '':
-                    for teacher in subject_chosen_details[2]:
-                        if json_object[teacher]["timetable"][i][j+k]:
-                            messagebox.showwarning("WARNING", teacher+" has "+str(json_object[teacher]["timetable"][i][j])+" during the selected slot")
-                            condition = False
-                else:
-                    if json_object[teacher_selected]["timetable"][i][j+k]:
-                        messagebox.showwarning("WARNING", teacher_selected+" has "+str(json_object[teacher_selected]["timetable"][i][j])+" during the selected slot")
-                        condition = False
-
-                for classes in subject_chosen_details[4]:
-                    if json_object[classes]["timetable"][i][j+k]:
-                        messagebox.showwarning("WARNING", classes+" has "+json_object[classes]["timetable"][i][j]+" during the selected slot")
-                        condition = False
-
-                for lab in subject_chosen_details[3]:
-                    if json_object[lab]["timetable"][i][j+k]:
-                        messagebox.showwarning("WARNING", lab+" has "+str(json_object[lab]["timetable"][i][j])+" during the selected slot")
-                        condition = False
-            
-            if int(subject_chosen_details[-3])+int(subject_chosen_details[-1]) > int(subject_chosen_details[1]):
-                messagebox.showwarning("WARNING", "The number of classes per week has exceeded the limit")
-                condition = False
+            condition = check(subject_details, subject_chosen, json_object, True)
             
             if condition:
                 pass
@@ -179,6 +221,17 @@ def timetable(root, button1, button2, button3, button4, button5):
                 j = j1
             else:
                 dropdowns_list[i+1][j+1].current(0)
+                
+                # Possible options
+                possible_list = []
+                teachers_list = dropdowns_list[i+1][j+1].cget("values")[1:]
+                for subject_option in teachers_list:
+                    c1 = check(subject_details, subject_option, json_object, False)
+                    if c1:
+                        possible_list.append(subject_option)
+                
+                if possible_list:
+                    messagebox.showinfo("POSSIBLE OPTIONS", "Possible Options:\n".upper()+"\n".join(possible_list))
                 return
 
             for classes in subject_chosen_details[4]:
@@ -292,3 +345,7 @@ def timetable(root, button1, button2, button3, button4, button5):
     temp.grid(row=10, column=9, padx=3)
 
     root.eval('tk::PlaceWindow . center')
+
+# root = Tk()
+# timetable(root, 1, 2, 3,4, 5)
+# root.mainloop()

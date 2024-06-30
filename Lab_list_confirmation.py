@@ -3,7 +3,7 @@ import json
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
-from Main_window import main_window
+from Universal_subjects import universal_subjects
 
 def lab_confirmation(root):
     
@@ -72,7 +72,7 @@ def lab_confirmation(root):
         for widget in root.winfo_children():
             widget.destroy()
         
-        main_window(root)
+        universal_subjects(root)
 
     with open('temp.json', 'r') as file:
         json_object = json.load(file)

@@ -3,19 +3,24 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 
-def class_teacher(root, button1, button2, button3, button4, button5):
+def class_teacher(root, button1, button2, button3, button4, button5, button6, button7, button8, button9):
     root.title("Class teacher")
     
     def back():
         for widget in root.winfo_children():
-            if widget not in [button1, button2, button3, button4, button5]:
+            if widget not in [button1, button2, button3, button4, button5, button6, button7, button8, button9]:
                 widget.destroy()
 
         button1.grid(row=0, column=0, padx=20, pady=12)
-        button2.grid(row=2, column=0, padx=20, pady=12)
-        button3.grid(row=3, column=0, padx=20)
-        button4.grid(row=4, column=0, padx=20, pady=12)
-        button5.grid(row=1, column=0, padx=20)
+        button2.grid(row=0, column=1, padx=20, pady=12)
+        button3.grid(row=1, column=0, columnspan=2, padx=20)
+        button4.grid(row=2, column=0, padx=20, pady=12)
+        button5.grid(row=2, column=1, padx=20, pady=12)
+        button6.grid(row=3, column=0, padx=20)
+        button7.grid(row=3, column=1, padx=20)
+        button8.grid(row=4, column=0, padx=20, pady=12)
+        button9.grid(row=4, column=1, padx=20, pady=12)
+        
         root.title("TIMETABLE")
         root.eval('tk::PlaceWindow . center')
         
