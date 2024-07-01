@@ -271,13 +271,18 @@ def subject_teacher_assignment(root, button1, button2, button3, button4, button5
         file.close()
 
         subject_list_1 = json_object[class_name]["subject_teacher_list"]
-        teacher_label.config(text=("Class teacher: "+json_object[class_name]["teacher"]).upper())
+        registered = 0
+        assigned = 0
         
         for subject in subject_registered.get_children():
             subject_registered.delete(subject)
 
         for subject in subject_list_1:
             subject_registered.insert(parent='', index=END, iid=subject, text='', value=subject_list_1[subject])
+            registered += int(subject_list_1[subject][1])
+            assigned += int(subject_list_1[subject][-1])
+        
+        teacher_label.config(text=("Class teacher: "+json_object[class_name]["teacher"]).upper()+"\n\nNO OF PERIODS REGISTERED: "+str(registered)+"\n\nNO OF PERIODS ASSIGNED: "+str(assigned))
         
         checkbutton_1.deselect()
         checkbutton_2.deselect()
@@ -695,7 +700,7 @@ def subject_teacher_assignment(root, button1, button2, button3, button4, button5
     subject_registered.heading("COUNT", text="COUNT", anchor=CENTER)
 
     edit_button = Button(root, text="EDIT DETAILS", command=edit_details, font=("Arial", 11))
-    edit_button.grid(row=4, column=0, columnspan=2)
+    edit_button.grid(row=4, column=0, columnspan=2, pady=10)
 
     clear_button = Button(root, text="CLEAR DETAILS", command=clear_details, font=("Arial", 11))
     clear_button.grid(row=4, column=2)
@@ -838,5 +843,5 @@ def subject_teacher_assignment(root, button1, button2, button3, button4, button5
     root.eval('tk::PlaceWindow . center')
     
 # root = Tk()
-# subject_teacher_assignment(root, 1, 2, 3, 4, 5)
+# subject_teacher_assignment(root, 1, 2, 3, 4, 5, 6, 7, 8, 9)
 # root.mainloop()

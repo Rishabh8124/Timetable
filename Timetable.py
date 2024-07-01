@@ -50,7 +50,14 @@ def timetable(root, button1, button2, button3, button4, button5, button6, button
         class_details = json_object[class_name]
         subject_details = class_details["subject_teacher_list"]
         class_timetable = class_details["timetable"]
-        teacher_label.config(text=("Class teacher: "+class_details["teacher"]).upper())
+        
+        registered = 0
+        assigned = 0
+        
+        for i in subject_details:
+            registered += int(subject_details[i][1])
+            
+        teacher_label.config(text=("Class teacher: "+class_details["teacher"]).upper()+"\n\nNO OF PERIODS REGISTERED: "+str(registered))
 
         final_subject_list = ['']
         for children in subject_registered.get_children():
@@ -347,5 +354,5 @@ def timetable(root, button1, button2, button3, button4, button5, button6, button
     root.eval('tk::PlaceWindow . center')
 
 # root = Tk()
-# timetable(root, 1, 2, 3,4, 5)
+# timetable(root, 1, 2, 3,4, 5, 6, 7, 8, 9)
 # root.mainloop()
