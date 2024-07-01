@@ -5,7 +5,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from Lab_list_confirmation import lab_confirmation
 
-def class_confirmation(root):
+def class_confirmation(root, import_option):
 
     root.title("Class List")
     
@@ -82,21 +82,36 @@ def class_confirmation(root):
             n_root.destroy()
 
         n_root = Tk()
+        n_root.title("ADD CLASS")
+        
+        class_label = Label(n_root, text="CLASS", font=("Arial", 11))
+        class_label.grid(row=0, column=0, padx=70, pady=15)
 
-        dropdown = ttk.Combobox(n_root, values=["Choose Class"]+c)
-        dropdown.grid(row=0, column=0)
+        dropdown = ttk.Combobox(n_root, values=["Choose Class"]+c, font=("Arial", 11))
+        dropdown.grid(row=0, column=1, padx=10)
+        
+        sec_label = Label(n_root, text="SECTION", font=("Arial", 11))
+        sec_label.grid(row=1, column=0)
 
-        section_entry = Entry(n_root)
-        section_entry.grid(row=0, column=1)
+        section_entry = Entry(n_root, font=("Arial", 11))
+        section_entry.grid(row=1, column=1)
 
-        but1 = Button(n_root, text="ADD", command=add)
-        but1.grid(row=1, column=0)
+        but1 = Button(n_root, text="ADD", command=add, font=("Arial", 12))
+        but1.grid(row=2, column=0, sticky=W+E, padx=10, pady=15)
 
-        but2 = Button(n_root, text="BACK", command=back)
-        but2.grid(row=1, column=1)
+        but2 = Button(n_root, text="BACK", command=back, font=("Arial", 12))
+        but2.grid(row=2, column=1, sticky=W+E, padx=10, pady=10)
+        
+        n_root.eval('tk::PlaceWindow . center')
 
         n_root.mainloop()
 
+    def back():
+        for widgets in root.winfo_children():
+            widgets.destroy()
+        
+        import_option(root)
+    
     with open('temp.json', 'r') as file:
         json_object = json.load(file)
         academic_year = json_object['academic_year']
@@ -118,8 +133,8 @@ def class_confirmation(root):
     class_list_label.grid(row=0, column=0, columnspan=3, pady=8)
     
     style = ttk.Style(root)
-    style.configure('Treeview', font=("Arial", 9))
-    style.configure('Treeview.Heading', font=("Arial", 10))
+    style.configure('Treeview', font=("Arial", 10))
+    style.configure('Treeview.Heading', font=("Arial", 11))
 
     for i in range(3):
 
@@ -154,11 +169,14 @@ def class_confirmation(root):
         elif (i == 2): delete[i] = Button(root, text="DELETE", command= lambda: delete_command(2), font=("Arial", 10))
         delete[i].grid(row=4, column=i, sticky=W+E, padx=10)
     
-    confirm_button = Button(root, text="CONFIRM CLASSES", command=confirm, font=("Arial", 10))
-    confirm_button.grid(row=5, column=0, columnspan=3, pady=8)
+    confirm_button = Button(root, text="CONFIRM CLASSES", command=confirm, font=("Arial", 11))
+    confirm_button.grid(row=5, column=0, columnspan=2, pady=8, padx=10, sticky=W+E)
+    
+    confirm_button = Button(root, text="BACK", command=back, font=("Arial", 11))
+    confirm_button.grid(row=5, column=2, pady=8, padx=10, sticky=W+E)
     
     root.eval('tk::PlaceWindow . center')
 
 # root = Tk()
-# class_confirmation(root)
+# class_confirmation(root, 1)
 # root.mainloop()

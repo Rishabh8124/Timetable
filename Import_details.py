@@ -5,7 +5,9 @@ from tkinter import ttk
 from tkinter import messagebox
 from Main_window import main_window
 
-def import_details(root):
+def import_details(root, import_option):
+    root.title("IMPORT")
+    
     academic_year_temp = os.listdir("./Academic_years")
     academic_year_list = []
     for folder in academic_year_temp:
@@ -38,6 +40,16 @@ def import_details(root):
 
     def checkbutton_3_function():
         pass
+    
+    def back():
+        dropdown.destroy()
+        checkbutton1.destroy()
+        checkbutton2.destroy()
+        checkbutton3.destroy()
+        import_button.destroy()
+        back_button.destroy()
+
+        import_option(root)
 
     def import_function():
         selected_year = dropdown.get()
@@ -133,30 +145,34 @@ def import_details(root):
         checkbutton2.destroy()
         checkbutton3.destroy()
         import_button.destroy()
+        back_button.destroy()
 
         main_window(root)
 
-    ft = ("Arial", 10)
-    ft1 = ("Arial", 11)
+    ft = ("Arial", 11)
+    ft1 = ("Arial", 12)
     
     dropdown = ttk.Combobox(root, values=academic_year_list, font=ft1)
-    dropdown.grid(row=0, column=0, pady=5)
+    dropdown.grid(row=0, column=0, pady=5, columnspan=2)
     dropdown.set("Select Academic Year")
 
     checkbutton1_variable = IntVar()
     checkbutton1 = Checkbutton(root, text='TEACHER LIST', variable=checkbutton1_variable, onvalue=1, offvalue=0, command=checkbutton_1_function, font=ft) # command
-    checkbutton1.grid(row=1, column=0, pady=5)
+    checkbutton1.grid(row=1, column=0, pady=5, columnspan=2)
 
     checkbutton2_variable = IntVar()
     checkbutton2 = Checkbutton(root, text='CLASS - SUBJECT - TEACHER ASSIGNMENT', variable=checkbutton2_variable, onvalue=1, offvalue=0, state=DISABLED, command=checkbutton_2_function, font=ft)
-    checkbutton2.grid(row=2, column=0, pady=5, padx=10)
+    checkbutton2.grid(row=2, column=0, pady=5, padx=10, columnspan=2)
 
     checkbutton3_variable = IntVar()
     checkbutton3 = Checkbutton(root, text='TIMETABLE', variable=checkbutton3_variable, onvalue=1, offvalue=0, state=DISABLED, command=checkbutton_3_function, font=ft)
-    checkbutton3.grid(row=3, column=0, pady=5)
+    checkbutton3.grid(row=3, column=0, pady=5, columnspan=2)
 
-    import_button = Button(root, text="IMPORT", command=import_function, font=ft)
-    import_button.grid(row=4, column=0, pady=10)
+    import_button = Button(root, text="IMPORT", command=import_function, font=ft1)
+    import_button.grid(row=4, column=0, pady=10, sticky=W+E)
+    
+    back_button = Button(root, text="BACK", command=back, font=ft1)
+    back_button.grid(row=4, column=1, pady=10, padx=10, sticky=W+E)
     
     root.eval('tk::PlaceWindow . center')
 

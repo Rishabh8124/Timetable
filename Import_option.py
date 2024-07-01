@@ -10,13 +10,13 @@ def import_option(root):
         button1.destroy()
         button2.destroy()
 
-        import_details(root)
+        import_details(root, import_option)
 
     def button2_click():
         button1.destroy()
         button2.destroy()
         
-        class_confirmation(root)
+        class_confirmation(root, import_option)
 
     ft = ("Arial", 12)
     
@@ -31,3 +31,7 @@ def import_option(root):
     button2.grid(row=1, column=0, padx=20, pady=20)
     
     root.eval('tk::PlaceWindow . center')
+
+# root = Tk()
+# import_option(root)
+# root.mainloop()

@@ -108,11 +108,11 @@ def Academic_year_window(root) :
         academic_year_entry = Entry(root, font=ft1)
         academic_year_entry.grid(row=0, column=1, padx=10, pady=5)
 
-        confirm_button = Button(root, text="ADD", command=create_year, font=ft, pady=3, padx=5)
-        confirm_button.grid(row=1, column=0, padx=50, pady=10)
+        confirm_button = Button(root, text="ADD", command=create_year, font=ft, pady=3, padx=50,)
+        confirm_button.grid(row=1, column=0, pady=10, sticky=W+E, padx=10)
 
         back_button = Button(root, text="BACK", command=back, font=ft, pady=3, padx=5)
-        back_button.grid(row=1, column=1, padx=10, pady=10)
+        back_button.grid(row=1, column=1, padx=10, pady=10, sticky=W+E)
         
         root.eval('tk::PlaceWindow . center')
 
@@ -127,6 +127,5 @@ def Academic_year_window(root) :
 
     choose_button.grid(row=0, column=0, padx=40, pady=5)
     create_button.grid(row=1, column=0, pady=20)
-    
     
     root.eval('tk::PlaceWindow . center')

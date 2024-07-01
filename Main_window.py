@@ -135,6 +135,6 @@ def main_window(root):
     
     root.eval('tk::PlaceWindow . center')
 
-root = Tk()
-main_window(root)
-root.mainloop()
+# root = Tk()
+# main_window(root)
+# root.mainloop()
