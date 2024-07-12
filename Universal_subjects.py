@@ -132,6 +132,47 @@ def universal_subjects(root):
         
         main_window(root)        
     
+    def copy_confirm(old_drop_down, copy_button):
+        if not div_dropdown.get() or not class_dropdown.get():
+            messagebox.showwarning("WARNING", "Select valid class")
+            return
+
+        old_class = int(old_drop_down.get())
+        new_class = int(class_dropdown.get())
+        
+        subject_list[new_class] = []
+        
+        for subject_detail in subject_list[old_class]:
+            subject_list[new_class].append([subject_detail[0], subject_detail[1]])
+        
+        for subject_added in subject_list_tree.get_children():
+            subject_list_tree.delete(subject_added)
+        
+        class_name = int(class_dropdown.get())
+        
+        for subject_added in subject_list[class_name]:
+            subject_list_tree.insert(parent='', index=END, iid=subject_added[0], text='', value=subject_added)
+        
+        old_drop_down.grid_forget()
+        copy_button.grid_forget()
+        copy_details_button.grid(row=2, column=0, columnspan=2, pady=10, padx=10, sticky=W+E)                 
+        
+    def copy_list():
+        if not div_dropdown.get() or not class_dropdown.get():
+            messagebox.showwarning("WARNING", "Select valid class")
+            return
+        
+        copy_details_button.grid_forget()
+        
+        class_old_dropdown = ttk.Combobox(root, value=list(class_dict.keys()), font=("Arial", 11))
+        class_old_dropdown.grid(row=2, column=0, sticky=W+E, padx=10)
+        div_select = div_dropdown.get()
+        class_old_dropdown.set(class_dropdown.get())
+        class_old_dropdown.config(values=class_dict[div_select])
+        
+        copy_button = Button(root, text="COPY", font=("Arial", 11), command=lambda: copy_confirm(class_old_dropdown, copy_button))
+        copy_button.grid(row=2, column=1, sticky=W+E, padx=10)
+    
     with open("temp.json") as file:
         json_object = json.load(file)
         academic_year = json_object["academic_year"]
@@ -158,8 +199,11 @@ def universal_subjects(root):
     class_dropdown.grid(row=1, column=1, sticky=W+E, padx=10, pady=10)
     class_dropdown.bind("<<ComboboxSelected>>", class_selected)
     
+    copy_details_button = Button(root, text="COPY LIST", font=("Arial", 11), command=copy_list)
+    copy_details_button.grid(row=2, column=0, columnspan=2, pady=10, padx=10, sticky=W+E)    
+    
     list_frame = Frame(root)
-    list_frame.grid(row=2, column=0, columnspan=2, padx=10, pady=10)
+    list_frame.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
 
     list_scroll = Scrollbar(list_frame, orient=VERTICAL)
     list_scroll.pack(side=RIGHT, fill='y')
@@ -180,27 +224,27 @@ def universal_subjects(root):
     subject_list_tree.heading("COUNT", text="COUNT", anchor=CENTER)
     
     edit_button = Button(root, text="EDIT", font=("Arial", 11), padx=70, command=edit_subject)
-    edit_button.grid(row=3, column=0, columnspan=1, pady=10, padx=10, sticky=W+E)
+    edit_button.grid(row=4, column=0, columnspan=1, pady=10, padx=10, sticky=W+E)
     
     delete_button = Button(root, text="DELETE", font=("Arial", 11), command=delete_subject)
-    delete_button.grid(row=3, column=1, columnspan=1, pady=10, padx=10, sticky=W+E)
+    delete_button.grid(row=4, column=1, columnspan=1, pady=10, padx=10, sticky=W+E)
     
     subject_label = Label(root, text="SUBJECT", font=("Arial", 11))
-    subject_label.grid(row=4, column=0, padx=10, pady=10)
+    subject_label.grid(row=5, column=0, padx=10, pady=10)
     
     subject_entry = Entry(root, font=("Arial", 10))
-    subject_entry.grid(row=4, column=1, padx=10, pady=10, sticky=W+E)
+    subject_entry.grid(row=5, column=1, padx=10, pady=10, sticky=W+E)
     
     count_label = Label(root, text="COUNT", font=("Arial", 11))
-    count_label.grid(row=5, column=0, padx=10, pady=10)
+    count_label.grid(row=6, column=0, padx=10, pady=10)
     
     count_entry = Entry(root, font=("Arial", 10))
-    count_entry.grid(row=5, column=1, padx=10, pady=10, sticky=W+E)
+    count_entry.grid(row=6, column=1, padx=10, pady=10, sticky=W+E)
     
     add_button = Button(root, text="ADD", font=("Arial", 11), command=add_subject)
-    add_button.grid(row=6, column=0, columnspan=2, pady=10, padx=10, sticky=W+E)
+    add_button.grid(row=7, column=0, columnspan=2, pady=10, padx=10, sticky=W+E)
     
     finalize_button = Button(root, text="FINALIZE", font=("Arial", 11), command=finalize)
-    finalize_button.grid(row=7, column=0, columnspan=2, pady=10, padx=10, sticky=W+E)
+    finalize_button.grid(row=8, column=0, columnspan=2, pady=10, padx=10, sticky=W+E)
     
     root.eval('tk::PlaceWindow . center')

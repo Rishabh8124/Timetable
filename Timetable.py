@@ -110,13 +110,13 @@ def timetable(root, button1, button2, button3, button4, button5, button6, button
                 
                 if teacher_selected == '':
                     for teacher in subject_chosen_details[2]:
-                        if json_object[teacher]["timetable"][i][j+k]:
+                        if not json_object[teacher]["timetable"][i][j+k] == "":
                             if t: messagebox.showwarning("WARNING", teacher+" has "+str(json_object[teacher]["timetable"][i][j])+" during the selected slot")
                             condition = False
                             break
                     if condition == False: break
                 else:
-                    if json_object[teacher_selected]["timetable"][i][j+k]:
+                    if not json_object[teacher_selected]["timetable"][i][j+k] == "":
                         if t: messagebox.showwarning("WARNING", teacher_selected+" has "+str(json_object[teacher_selected]["timetable"][i][j])+" during the selected slot")
                         condition = False
                         break

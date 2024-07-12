@@ -6,7 +6,7 @@ from datetime import datetime
 
 def find_teacher(root, button1, button2, button3, button4, button5, button6, button7, button8, button9):
     
-    root.title('FREE TEACHERS')
+    root.title('FIND TEACHERS')
     
     with open("temp.json") as file:
         json_object = json.load(file)
@@ -19,7 +19,7 @@ def find_teacher(root, button1, button2, button3, button4, button5, button6, but
         for teacher in teacher_list:
             display_teachers.append('-'.join(teacher))
     
-    current_day = 4 #datetime.now().weekday()
+    current_day = datetime.now().weekday()
     
     day_to_index = {
         0: "Monday",
@@ -129,7 +129,7 @@ def find_teacher(root, button1, button2, button3, button4, button5, button6, but
     period_dropdown.grid(row=2, column=1, sticky=W+E, padx=10, pady=10)
     period_dropdown.bind("<<ComboboxSelected>>", period_selected)
     
-    info_label = Label(root, text="Hello", font=("Arial", 13))
+    info_label = Label(root, text="", font=("Arial", 13))
     info_label.grid(row=3, column=0, columnspan=2, sticky=W+E, padx=10, pady=5)
     
     find_button = Button(root, text="FIND", command=find, pady=5, font=("Arial", 11))
